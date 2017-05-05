@@ -14,7 +14,7 @@ public class JumpAnimation extends Transition {
     public JumpAnimation(Node node) {
         falling = new AtomicBoolean(false);
         this.node = node;
-        setCycleDuration(Duration.seconds(1));
+        setCycleDuration(Duration.seconds(1.2));
         currentPosition = node.getTranslateY() - maxValue;
         fallAnimation = new FallAnimation();
         setOnFinished(event -> {

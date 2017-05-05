@@ -1,25 +1,22 @@
-import javafx.scene.layout.Pane;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 
 
-public class Unicorn extends Pane{
-    int width;
-    int height;
-    Rectangle rectangle;
+public class Unicorn extends ImageView{
+    int width = 20;
+    int height = 20;
     JumpAnimation jumpAnimation;
     MoveAnimation moveAnimation;
 
+
     public Unicorn() {
-        maxHeight(10);
-        maxWidth(10);
-        width = 10;
-        height = 10;
-        rectangle = new Rectangle(width,height, Color.BLUE);
-        getChildren().add(rectangle);
+        setImage(new Image("ee.png"));
+        setFitWidth(30);
+        setFitHeight(30);
+
         jumpAnimation  = new JumpAnimation(this);
-        moveAnimation = new MoveAnimation(rectangle);
+        moveAnimation = new MoveAnimation(this);
     }
 
     public void jump() {

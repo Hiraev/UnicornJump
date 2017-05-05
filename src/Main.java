@@ -18,7 +18,7 @@ public class Main extends Application {
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot = new Pane();
         menuRoot = new Pane();
-        game = new Game();
+        game = new Game(gameRoot);
         appRoot.getChildren().add(gameRoot);  // Поменять
         gameRoot.getChildren().addAll(game.getPlatforms());
         gameRoot.getChildren().add(game.getUnicorn());
@@ -40,13 +40,6 @@ public class Main extends Application {
                 game.getUnicorn().stopMove();
                 game.getUnicorn().move(MoveAnimation.DIRECTION.RIGHT);
             }
-            if (event.getCode() == KeyCode.UP) {
-                game.getUnicorn().jump();
-                System.out.println(game.getUnicorn().getTranslateX());
-                System.out.println(game.getUnicorn().getLayoutX());
-            }
-
-
         });
         scene.setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.LEFT | event.getCode() == KeyCode.RIGHT) {
