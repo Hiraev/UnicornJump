@@ -4,7 +4,7 @@ import javafx.scene.layout.Pane;
 import java.util.ArrayList;
 
 public class Game {
-    Pane root;
+
     private Unicorn unicorn;
     private int score;
     private AnimationTimer timer;
@@ -32,8 +32,8 @@ public class Game {
 
     }
 
-    public Game(Pane root) {
-        this.root = root;
+    public Game() {
+
         unicorn = new Unicorn();
         timer = new AnimationTimer() {
             @Override
@@ -45,16 +45,6 @@ public class Game {
         timer.start();
         unicorn.setTranslateX(Main.WINDOW_WIDTH / 2);
         unicorn.setTranslateY(Main.WINDOW_HEIGHT / 3 * 2);
-
-        //ИСПРАВИТЬ ЭТОТ УЧАСТОК КОДА
-        unicorn.translateYProperty().addListener((value, oldVal, newVal) -> {
-            int offset = newVal.intValue();
-            int delta = (oldVal.intValue() - offset);
-            if (offset < root.getTranslateY() - offset & !unicorn.jumpAnimation.falling.get()) { // Поменять 150 на актуальное значение
-                root.setLayoutY(root.getLayoutY() + delta);
-                System.out.println("Delta : " + delta);
-            }
-        });
     }
 
     public ArrayList<Platform> getPlatforms() {
