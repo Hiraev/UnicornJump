@@ -6,7 +6,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    static int WINDOW_WIDTH = 300;
+    static int WINDOW_WIDTH = 400;
     static int WINDOW_HEIGHT = 600;
     private Pane appRoot;
     private Pane gameRoot;
