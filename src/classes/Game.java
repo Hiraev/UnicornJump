@@ -1,5 +1,4 @@
 import javafx.animation.AnimationTimer;
-import javafx.scene.layout.Pane;
 
 import java.util.ArrayList;
 
@@ -13,7 +12,7 @@ public class Game {
 
     private void setPlatforms() {
         for (int i = -1; i < 70; i++) {
-            platforms.add(new Platform(i));
+            platforms.add(new BasicPlatform(i));
         }
     }
 
@@ -29,7 +28,6 @@ public class Game {
                 }
             }
         }
-
     }
 
     public Game() {
@@ -45,6 +43,10 @@ public class Game {
         timer.start();
         unicorn.setTranslateX(Main.WINDOW_WIDTH / 2);
         unicorn.setTranslateY(Main.WINDOW_HEIGHT / 3 * 2);
+
+        Platform movePlatform = new MovePlatform(200);
+        movePlatform.action();
+        platforms.add(movePlatform);
     }
 
     public ArrayList<Platform> getPlatforms() {

@@ -1,0 +1,4 @@
+#appRoot {
+    -fx-background-image: url("file:src/images/stardust.png");
+    -fx-background-repeat: repeat;
+}

@@ -1,7 +1,10 @@
 import javafx.animation.Transition;
 import javafx.scene.Node;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JumpAnimation extends Transition {
@@ -10,8 +13,11 @@ public class JumpAnimation extends Transition {
     private double maxValue = Math.pow(3, Math.E + 1) * 5;
     private FallAnimation fallAnimation;
     AtomicBoolean falling;
+    MediaPlayer mediaPlayer;
 
     public JumpAnimation(Node node) {
+        Media sound = new Media(new File("src/sounds/jump.wav").toURI().toString());
+        mediaPlayer = new MediaPlayer(sound);
         falling = new AtomicBoolean(false);
         this.node = node;
         setCycleDuration(Duration.seconds(1.2));
@@ -30,6 +36,7 @@ public class JumpAnimation extends Transition {
 
     @Override
     public void play() {
+        mediaPlayer.play();
         currentPosition = node.getTranslateY() - maxValue;
         falling.set(false);
         fallAnimation.stop();
@@ -51,6 +58,7 @@ public class JumpAnimation extends Transition {
 
         @Override
         public void play() {
+            mediaPlayer.stop();
             System.out.println("falling");
             currentPosition = node.getTranslateY() - 20;
             super.play();
