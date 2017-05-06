@@ -4,16 +4,16 @@ import javafx.scene.image.ImageView;
 
 
 public class Unicorn extends ImageView{
-    int width = 20;
+    int width = 30;
     int height = 20;
     JumpAnimation jumpAnimation;
     MoveAnimation moveAnimation;
 
 
     public Unicorn() {
-        setImage(new Image("ee.png"));
-        setFitWidth(30);
-        setFitHeight(30);
+        setImage(new Image("Unicorn.png"));
+        setFitWidth(40);
+        setFitHeight(25);
 
         jumpAnimation  = new JumpAnimation(this);
         moveAnimation = new MoveAnimation(this);
