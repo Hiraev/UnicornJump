@@ -10,7 +10,7 @@ public class Platform extends Rectangle {
         setArcWidth(5);
         setWidth(30);
         setHeight(10);
-        setTranslateX(Math.random() * Main.WINDOW_WIDTH - width);
-        setTranslateY(Math.random() * Main.WINDOW_HEIGHT/4 - 150*count);
+        setTranslateX(Math.random() * (Main.WINDOW_WIDTH - width - 70) + 30);
+        setTranslateY(Math.random() * Main.WINDOW_HEIGHT / 4 - 150 * count);
     }
 }
