@@ -161,8 +161,9 @@ public class Main extends Application {
 
             int offset = newVal.intValue();
             int delta = (oldVal.intValue() - offset);
-            if (offset - 100 < gameRoot.getTranslateY() & !game.getUnicorn().jumpAnimation.falling.get()) { // Поменять 150 на актуальное значение
-                gameRoot.setLayoutY(gameRoot.getLayoutY() + 3);
+            if (Math.abs(offset) > gameRoot.getLayoutY() - 150
+                    & !game.getUnicorn().jumpAnimation.falling.get()) {
+                gameRoot.setLayoutY(gameRoot.getLayoutY() + delta);
             }
         });
 
