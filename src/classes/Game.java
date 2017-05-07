@@ -1,4 +1,5 @@
 import javafx.animation.AnimationTimer;
+import javafx.geometry.Bounds;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,13 @@ public class Game {
     private void update() {
         if (unicorn.jumpAnimation.falling.get()) {
             for (Platform platform : platforms) {
-                if (platform.getBoundsInParent().intersects(unicorn.getBoundsInParent())) {
+                Bounds ub = unicorn.getBoundsInParent();
+                Bounds pb = platform.getBoundsInParent();
+                //Страшные условия. Короче, прыгать, когда низ персонажа оказывается
+                // внутри платформы, и он сам находится хотя бы на 3/4 внутри платформы
+                if ((pb.getMinX() < (ub.getMaxX() - unicorn.getFitWidth() / 4) & pb.getMaxX() > (ub.getMinX()) + unicorn.getFitWidth() / 4) &
+                        pb.getMinY() <= ub.getMaxY() &
+                        pb.getMinY() >= ub.getMinY()) {
                     unicorn.jump();
                 }
             }
