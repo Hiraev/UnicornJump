@@ -15,12 +15,12 @@ public class MoveAnimation extends Transition {
     public MoveAnimation(Unicorn node) {
         this.node = node;
         setCycleDuration(Duration.INDEFINITE);
-        firstPositionX = node.getLayoutX();
+        firstPositionX = node.getTranslateX();
     }
 
     @Override
     protected void interpolate(double frac) {
-        node.setLayoutX(node.getLayoutX() + (Math.pow((1 - frac) + 0.8, Math.E + (1 - frac))) * direction);
+        node.setTranslateX(node.getTranslateX() + (Math.pow((1 - frac) + 0.8, Math.E + (1 - frac))) * direction);
     }
 
     public void setDirection(DIRECTION direction) {
