@@ -3,6 +3,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Platform extends Rectangle {
+    public enum Type {
+        BasicPlatform, MovePlatform
+    }
+
     protected DropShadow effect;
     protected int width = 30;
     protected int height = 10;
@@ -16,6 +20,8 @@ public abstract class Platform extends Rectangle {
         setWidth(30);
         setHeight(10);
     }
+
+    public abstract Type getType();
 
     public abstract void action();
 

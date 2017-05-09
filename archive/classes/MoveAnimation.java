@@ -4,20 +4,18 @@ import javafx.util.Duration;
 
 
 public class MoveAnimation extends Transition {
-    private Node node;                  //Объект, который необхдимо сдвинуть
-    private int direction = 1;          //Направление по умолчанию
-    private double firstPositionX;      //Позиция, откуда нужно начинать движение
-    private Breaker breaker;            //Небольшая анимация торможения
+    private Node node;
+    private int direction = 1;
+    private double firstPositionX;
 
     public enum DIRECTION {
         LEFT, RIGHT
     }
 
-    public MoveAnimation(Node node) {
-        breaker = new Breaker();
+    public MoveAnimation(Unicorn node) {
         this.node = node;
-        this.firstPositionX = node.getTranslateX(); //Устанавливаем текущую позицию объекта
-        setCycleDuration(Duration.INDEFINITE);      //Устанавливаем бесконечный цикл
+        this.firstPositionX = node.getTranslateX();
+        setCycleDuration(Duration.INDEFINITE);
     }
 
     @Override
@@ -28,13 +26,14 @@ public class MoveAnimation extends Transition {
     public void setDirection(DIRECTION direction) {
         if (direction == DIRECTION.LEFT) {
             this.direction = -1;
-        } else if (direction == DIRECTION.RIGHT) {
+        } else {
             this.direction = 1;
-        } else throw new IllegalArgumentException("Необходимо указать направление движения");
+        }
     }
 
     @Override
     public void stop() {
+        Breaker breaker = new Breaker();
         breaker.play();
         super.stop();
     }

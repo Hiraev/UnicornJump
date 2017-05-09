@@ -1,6 +1,7 @@
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
@@ -10,10 +11,22 @@ import javafx.util.Duration;
 
 
 public class MovePlatform extends Platform {
+
     private TranslateTransition translateTransition;
+    private static Type type;
+    private static Image image;
+
+    static {
+        type = Type.MovePlatform;
+        image = new Image("file:src/images/bg_metal.png");
+    }
+
+    @Override
+    public Type getType() {
+        return type;
+    }
 
     public MovePlatform(int count) {
-        Image image = new Image("file:src/images/bg_metal.png");
         setFill(new ImagePattern(image));
         setId("movePlatform");
         setStrokeWidth(0.5);

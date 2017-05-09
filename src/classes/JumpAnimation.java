@@ -1,51 +1,49 @@
 import javafx.animation.Transition;
 import javafx.scene.Node;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
-import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class JumpAnimation extends Transition {
-    private Node node;
-    private double currentPosition;
-    private double maxValue = Math.pow(3, Math.E + 1) * 5;
-    private FallAnimation fallAnimation;
-    AtomicBoolean falling;
-    MediaPlayer mediaPlayer;
+    private Node node;                                      //Объект, который должен прыгать
+    private double currentPosition;                         //Последняя позиция объекта, после прыжка. Позиция, откуда надо падать
+    private double maxValue = Math.pow(3, Math.E + 1) * 4;  //Максимальная высота, на которую прыгает объект
+    private FallAnimation fallAnimation;                    //Анимация падения
+
+    public boolean isFalling() {
+        return isFalling.get();
+    }
+
+    private AtomicBoolean isFalling;                          //Объект падает или нет
 
     public JumpAnimation(Node node) {
-        Media sound = new Media(new File("src/sounds/jump.wav").toURI().toString());
-        mediaPlayer = new MediaPlayer(sound);
-        falling = new AtomicBoolean(false);
-        this.node = node;
-        setCycleDuration(Duration.seconds(1.2));
-        currentPosition = node.getTranslateY() - maxValue;
         fallAnimation = new FallAnimation();
+        this.node = node;
+        isFalling = new AtomicBoolean(false);
+        currentPosition = node.getTranslateY() - maxValue;
+        setCycleDuration(Duration.seconds(1.2));
         setOnFinished(event -> {
-            fallAnimation.play();
-            falling.set(true);
+            fallAnimation.play();                           //После завершения прыжка начинаем падать
+            isFalling.set(true);                              //и ставим значение "падает" на true
         });
     }
 
+
     @Override
     protected void interpolate(double frac) {
-        node.setTranslateY(currentPosition + Math.pow(2 * (1 - frac) + 1, Math.E + (1 - frac)) * 5);
+        node.setTranslateY(currentPosition + Math.pow(2 * (1 - frac) + 1, Math.E + (1 - frac)) * 4);
     }
 
     @Override
     public void play() {
-        mediaPlayer.play();
-        currentPosition = node.getTranslateY() - maxValue;
-        falling.set(false);
-        fallAnimation.stop();
+        fallAnimation.stop();                               //Останавливаем анимацию падения
+        currentPosition = node.getTranslateY() - maxValue;  //Обновляем currentPosition
+        isFalling.set(false);                                 //Ставим значение "падает" на false
         super.play();
-        System.out.println("Jumping");
     }
 
     @Override
-    public void stop() {
+    public void stop() {                                    //Действия при насильной остановке прыжка
         currentPosition = node.getTranslateY() - maxValue;
         super.stop();
     }
@@ -58,8 +56,6 @@ public class JumpAnimation extends Transition {
 
         @Override
         public void play() {
-            mediaPlayer.stop();
-            System.out.println("falling");
             currentPosition = node.getTranslateY() - 20;
             super.play();
         }

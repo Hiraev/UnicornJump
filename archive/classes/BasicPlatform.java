@@ -3,8 +3,15 @@ import javafx.scene.paint.ImagePattern;
 
 public class BasicPlatform extends Platform {
     private static Image image;
+    private static Type type;
     static {
         image = new Image("file:src/images/pool_table.png");
+        type = Type.BasicPlatform;
+    }
+
+    @Override
+    public Type getType() {
+        return type;
     }
 
     public BasicPlatform(int count) {

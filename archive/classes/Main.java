@@ -21,6 +21,7 @@ public class Main extends Application {
     private Pane menuRoot;
     private Game game;
     Rectangle rectangle;
+    private GameOverPane gameOverPane;
 
 
     /**
@@ -39,9 +40,8 @@ public class Main extends Application {
      */
 
     private Parent setUp() {
-
-
         appRoot = new Pane();
+        gameOverPane = new GameOverPane();
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot = new Pane();
         appRoot.setId("appRoot");
@@ -118,38 +118,48 @@ public class Main extends Application {
 
         game.getUnicorn().jump();
         scene.setOnKeyPressed(event -> {
+            if (!game.isGameOver()) {
+                /**
+                 * FOR DEVELOPERS
+                 */
 
+                label6.setText(String.valueOf((int) game.getUnicorn().getTranslateX()));
 
-            /**
-             * FOR DEVELOPERS
-             */
-
-            label6.setText(String.valueOf((int) game.getUnicorn().getTranslateX()));
-
-            /**
-             * END
-             */
-            if (event.getCode() == KeyCode.LEFT) {
-                game.getUnicorn().stopMove();
-                game.getUnicorn().move(MoveAnimation.DIRECTION.LEFT);
-            } else if (event.getCode() == KeyCode.RIGHT) {
-                game.getUnicorn().stopMove();
-                game.getUnicorn().move(MoveAnimation.DIRECTION.RIGHT);
+                /**
+                 * END
+                 */
+                if (event.getCode() == KeyCode.LEFT) {
+                    game.getUnicorn().stopMove();
+                    game.getUnicorn().move(MoveAnimation.DIRECTION.LEFT);
+                } else if (event.getCode() == KeyCode.RIGHT) {
+                    game.getUnicorn().stopMove();
+                    game.getUnicorn().move(MoveAnimation.DIRECTION.RIGHT);
+                }
             }
+
+
         });
         scene.setOnKeyReleased(event -> {
-            if (event.getCode() == KeyCode.LEFT | event.getCode() == KeyCode.RIGHT) {
-                game.getUnicorn().stopMove();
+            if (!game.isGameOver()) {
+                if (event.getCode() == KeyCode.LEFT | event.getCode() == KeyCode.RIGHT) {
+                    game.getUnicorn().stopMove();
+                }
             }
         });
 
         game.getUnicorn().translateYProperty().addListener((value, oldVal, newVal) -> {
 
+            if (game.isGameOver()) {
+                appRoot.getChildren().remove(gameRoot);
+                game = null;
+                appRoot.getChildren().add(gameOverPane);
+            }
+
             /**
              * FOR DEVELOPERS
              */
-            label4.setText(String.valueOf((int) gameRoot.getLayoutX()));
-            label5.setText(String.valueOf((int) gameRoot.getLayoutY()));
+            label4.setText(String.valueOf((int) game.minPosition));
+            //label5.setText("");
             label6.setText(String.valueOf((int) game.getUnicorn().getTranslateX()));
             label7.setText(String.valueOf((int) game.getUnicorn().getTranslateY()));
             label8.setText(String.valueOf(oldVal.intValue()));
