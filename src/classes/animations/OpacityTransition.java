@@ -1,6 +1,5 @@
-package platforms;
+package animations;
 
-import javafx.animation.Animation;
 import javafx.animation.Transition;
 import javafx.scene.Node;
 import javafx.util.Duration;
@@ -8,11 +7,17 @@ import javafx.util.Duration;
 
 public class OpacityTransition extends Transition {
     private Node node;
-    public OpacityTransition(Duration duration, Node node) {
-        setAutoReverse(true);
-        setCycleDuration(duration);
+
+    public void setNode(Node node) {
         this.node = node;
-        setCycleCount(Animation.INDEFINITE);
+    }
+
+    public OpacityTransition() {
+
+    }
+    public OpacityTransition(Duration duration, Node node) {
+        this.node = node;
+        setCycleDuration(duration);
     }
     @Override
     protected void interpolate(double frac) {

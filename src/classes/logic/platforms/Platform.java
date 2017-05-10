@@ -1,18 +1,16 @@
-package platforms;
+package logic.platforms;
 
 import javafx.animation.ParallelTransition;
 import javafx.scene.shape.Rectangle;
 
 public abstract class Platform extends Rectangle {
     protected Type type;
-    static ParallelTransition parallelTransition;
 
     public enum Type {
         Basic, Move, Vanish, BasicFade, MoveFade
     }
 
     protected Platform() {
-        parallelTransition = new ParallelTransition();
         setWidth(30);
         setHeight(10);
     }
@@ -21,9 +19,7 @@ public abstract class Platform extends Rectangle {
         return type;
     }
 
-    public static void play(){
-        parallelTransition.play();
-    }
+    public abstract void play();
 
     public abstract void touch();
 }

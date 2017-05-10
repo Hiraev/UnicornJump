@@ -1,4 +1,4 @@
-package platforms;
+package logic.platforms;
 
 import javafx.animation.Animation;
 import javafx.animation.TranslateTransition;
@@ -15,9 +15,12 @@ public class MovePlatform extends Platform {
         translateTransition.setCycleCount(Animation.INDEFINITE);
         translateTransition.setByX(gameWidth / 10);
         translateTransition.setToX(gameWidth - gameWidth / 10);
-        parallelTransition.getChildren().add(translateTransition);
     }
 
+    @Override
+    public void play() {
+        translateTransition.play();
+    }
 
     @Override
     public void touch() {

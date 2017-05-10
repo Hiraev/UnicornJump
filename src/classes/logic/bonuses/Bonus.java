@@ -1,4 +1,4 @@
-package bonuses;
+package logic.bonuses;
 
 import javafx.scene.shape.Rectangle;
 

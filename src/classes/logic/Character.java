@@ -1,3 +1,7 @@
+package logic;
+
+import animations.JumpAnimation;
+import animations.MoveAnimation;
 import javafx.scene.shape.Rectangle;
 
 

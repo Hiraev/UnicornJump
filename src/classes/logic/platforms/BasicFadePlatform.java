@@ -1,5 +1,7 @@
-package platforms;
+package logic.platforms;
 
+import animations.OpacityTransition;
+import javafx.animation.Animation;
 import javafx.util.Duration;
 
 public class BasicFadePlatform extends Platform {
@@ -8,10 +10,14 @@ public class BasicFadePlatform extends Platform {
     public BasicFadePlatform() {
         type = Type.BasicFade;
         opacityTransition = new OpacityTransition(Duration.seconds(2), this);
-        parallelTransition.getChildren().add(opacityTransition);
+        opacityTransition.setAutoReverse(true);
+        opacityTransition.setCycleCount(Animation.INDEFINITE);
     }
 
-
+    @Override
+    public void play() {
+        opacityTransition.play();
+    }
 
     @Override
     public void touch() {

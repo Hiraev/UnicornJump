@@ -1,6 +1,8 @@
-import barriers.Barrier;
-import bonuses.Bonus;
-import platforms.*;
+package logic;
+
+import logic.barriers.Barrier;
+import logic.bonuses.Bonus;
+import logic.platforms.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,7 @@ public class LevelMap {
         platforms = new ArrayList<>();
         barriers = new ArrayList<>();
         bonuses = new ArrayList<>();
+        platforms.add(new MoveFadePlatform(width));
 
         for (int i = 0; i < height; i++) {
             double random = Math.random();

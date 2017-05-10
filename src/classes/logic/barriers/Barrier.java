@@ -1,4 +1,4 @@
-package barriers;
+package logic.barriers;
 
 import javafx.scene.shape.Rectangle;
 

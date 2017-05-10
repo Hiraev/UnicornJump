@@ -1,6 +1,8 @@
+package logic;
+
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
-import platforms.Platform;
+import logic.platforms.Platform;
 
 public class Game {
     private static int LEVEL_HEIGHT = 20;   //Высота каждого уровня (кол-во платформ на уровень)
@@ -44,18 +46,17 @@ public class Game {
     //Устанавливаем позиции всех платформ
     private void platformDistributor() {
         for (Platform platform : levelMap.getPlatforms()) {
-
+                platform.play();
                 platform.setTranslateY(currentPlatformY -= 150);
                 platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
         }
-        Platform.play();
     }
 
     /**
      * НАСТРОЙКА УРОВНЯ
      */
     private void setUpLevel() {
-        level = 3;                                                      //Ставим уровень на 1
+        level = 2;                                                      //Ставим уровень на 1
         levelMap = new LevelMap(level, LEVEL_HEIGHT, GAME_WIDTH);   //Перезагружаем карту
                          //Ставим персонажа посередине экрана
                            //ближе к нижней части

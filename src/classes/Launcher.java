@@ -4,11 +4,13 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import menu.Menu;
-import platforms.Platform;
+import gui.menu.Menu;
+import logic.Game;
+import animations.MoveAnimation;
+import logic.platforms.Platform;
 
 
-public class MainGame extends Application {
+public class Launcher extends Application {
     static int WINDOW_WIDTH = 400;
     static int WINDOW_HEIGHT = 600;
     private Pane appRoot;
@@ -43,7 +45,8 @@ public class MainGame extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(setUp());
-        scene.getStylesheets().add("file:src2/styles/main.css");
+        //Пока уберем стили
+        //scene.getStylesheets().add("file:src/styles/main.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         gameRoot.setLayoutY(300);

@@ -1,4 +1,4 @@
-package platforms;
+package logic.platforms;
 
 public class VanishPlatform extends Platform {
     private int gameWidth;
@@ -7,6 +7,10 @@ public class VanishPlatform extends Platform {
         this.gameWidth = gameWidth;
     }
 
+    @Override
+    public void play() {
+
+    }
 
     @Override
     public void touch() {

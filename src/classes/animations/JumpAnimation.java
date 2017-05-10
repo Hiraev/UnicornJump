@@ -1,3 +1,5 @@
+package animations;
+
 import javafx.animation.Transition;
 import javafx.scene.Node;
 import javafx.util.Duration;
