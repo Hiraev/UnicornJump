@@ -7,16 +7,28 @@ import logic.platforms.Platform;
 public class Game {
     private static int LEVEL_HEIGHT = 20;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
-    private LevelMap levelMap;              //Уровень (карта)
+    private LevelGenerator levelGenerator;    //Генератор карты
+
     private int level;                      //Уровень (номер)
     private int score;                      //Очки
-    public final Character character;       //Персонаж
+    private int bonuses;                    //Бонусы
+    public Character character;             //Персонаж
     private final AnimationTimer timer;     //Игровое время
     public final int GAME_WIDTH;            //Ширина игрового поля
     public final int GAME_HEIGHT;           //Высота игрового поля
     private static Game instance;           //Статическое поле игры, игра одна, поэтому нет смысла создавать много
-    private int currentPlatformY;           //Позиция (Y) последней платформы
+
+    private int lastPlatformY;           //Позиция (Y) последней платформы
     private int minPosition;
+
+
+    /**
+     * ПОПРОБОВАТЬ НАЙТИ ИНОЙ СПОСОБ ОБНОВЛЕНИЯ КАРТЫ В MainGame
+     * @return
+     */
+    public int getLastPlatformY() {
+        return lastPlatformY;
+    }
 
     public static Game getInstance(int width, int height) {
         if (instance == null) {
@@ -28,12 +40,9 @@ public class Game {
     private Game(int width, int height) {
         GAME_WIDTH = width;
         GAME_HEIGHT = height;
-        currentPlatformY = 0;
-        character = Character.getInstance();
-        setUpLevel();
+        levelGenerator = new DynamicLevelGenerator(width, LEVEL_HEIGHT);
 
-
-        platformDistributor();
+        setUpGame();
 
         timer = new AnimationTimer() {
             @Override
@@ -45,24 +54,39 @@ public class Game {
 
     //Устанавливаем позиции всех платформ
     private void platformDistributor() {
-        for (Platform platform : levelMap.getPlatforms()) {
-                platform.play();
-                platform.setTranslateY(currentPlatformY -= 150);
-                platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
+        int platformListSize = levelGenerator.getLevel().getPlatforms().size();
+        //Цикл устроен таким образом, чтобы не менять позиции платформ, которые были добавлены в предыдущем уровне
+        for (int i = platformListSize - LEVEL_HEIGHT; i < platformListSize; i++) {
+            Platform platform = levelGenerator.getLevel().getPlatforms().get(i);
+            platform.play();
+            platform.setTranslateY(lastPlatformY -= 150);
+            platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
         }
+//        for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
+//            platform.play();
+//            platform.setTranslateY(lastPlatformY -= 150);
+//            platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
+//        }
     }
 
     /**
      * НАСТРОЙКА УРОВНЯ
      */
-    private void setUpLevel() {
-        level = 2;                                                      //Ставим уровень на 1
-        levelMap = new LevelMap(level, LEVEL_HEIGHT, GAME_WIDTH);   //Перезагружаем карту
-                         //Ставим персонажа посередине экрана
-                           //ближе к нижней части
+    private void setUpGame() {
+        lastPlatformY = 0;
+        gameOver = false;
+        level = 1;
+        //Ставим уровень на 1
+        //Перезагружаем карту
+        //Ставим персонажа посередине экрана
+        //ближе к нижней части
+
+        character = Character.getInstance();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
+        platformDistributor();
     }
+
 
     /**
      * УПРАВЛЯЮЩИЕ МЕТОДЫ
@@ -81,7 +105,7 @@ public class Game {
 
     //Перезапуск игры
     public void restart() {
-        setUpLevel();
+        gameOver = false;
         timer.start();
     }
 
@@ -92,8 +116,11 @@ public class Game {
     private void update() {
         if (!gameOver) {
 
-            if (character.isFalling()) {
-                for (Platform platform : levelMap.getPlatforms()) {
+
+            for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
+
+
+                if (character.isFalling()) {
 
                     Bounds ub = character.getBoundsInParent();
                     Bounds pb = platform.getBoundsInParent();
@@ -105,25 +132,48 @@ public class Game {
                         character.jump();
                         platform.touch();
                     }
+
+                    //Условие завершения игры
+                    if (character.getTranslateY() > minPosition + GAME_HEIGHT * 3 / 4) {
+                        gameOver = true;
+                    }
                 }
 
-                //Условие завершения игры
-                if (character.getTranslateY() > minPosition + GAME_HEIGHT * 3 / 4) {
-                    gameOver = true;
-                }
-            } else {
+            }
+
+            if (!character.isFalling()) {
                 //Меняем минимальную позицию, чтобы вычислить завершена игра или нет
                 minPosition = (int) character.getTranslateY();
+                //Очки
+                int newScore = (int) -character.getTranslateY() / 100;
+                if (newScore > score) score = newScore;
+            }
+            //Обновляем карту при приближении к последней платформе
+            if (character.getTranslateY() < lastPlatformY) {
+                updateMap();
             }
         } else { //Если игра завершена
             timer.stop();
+            character.setTranslateY(0);
+            character.setTranslateX(GAME_WIDTH / 2);
+            level = 1;
+            lastPlatformY = 0;
         }
+    }
+
+    private void updateMap() {
+        System.out.println("Update");
+        System.out.println(levelGenerator.getLevel().getPlatforms().size());
+        levelGenerator.updateLevel();
+
+        platformDistributor();
+        System.out.println(levelGenerator.getLevel().getPlatforms().size());
     }
 
     /**
      * Геттеры
      *
-     * @return character, levelMap, level
+     * @return character, levelGenerate, level
      */
     //Всякие геттеры
     public Character getCharacter() {
@@ -131,12 +181,13 @@ public class Game {
     }
 
     public LevelMap getLevelMap() {
-        return levelMap;
+        return levelGenerator.getLevel();
     }
 
     public int getLevel() {
         return level;
     }
+
     public boolean isGameOver() {
         return gameOver;
     }
