@@ -19,10 +19,10 @@ public class Button extends StackPane {
 
     public Button(String string, int windowWidth) {
         bg = new Rectangle(100, 40);
-        bg.setOpacity(0.5);
+        bg.setFill(Color.ANTIQUEWHITE);
         fillTransition = new FillTransition(Duration.seconds(1), bg);
         fillTransition.setFromValue(Color.ANTIQUEWHITE);
-        fillTransition.setToValue(Color.AQUA);
+        fillTransition.setToValue(Color.RED);
         fillTransition.setAutoReverse(true);
         fillTransition.setCycleCount(Animation.INDEFINITE);
         setAlignment(Pos.CENTER);
@@ -39,7 +39,7 @@ public class Button extends StackPane {
         });
 
         setOnMouseExited(event -> {
-            bg.setFill(Color.AQUA);
+            bg.setFill(Color.ANTIQUEWHITE);
             fillTransition.stop();
         });
     }

@@ -1,14 +1,11 @@
 package gui.menu;
 
-import javafx.scene.layout.Border;
-import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.Pane;
 
 
 public class Menu extends Pane {
     private static Menu instance;
-    private double windowWidth;
-    private double windowHeight;
+
     private Button start;
     private Button settings;
     private Button records;
@@ -21,27 +18,26 @@ public class Menu extends Pane {
         return instance;
     }
 
-    public Button getStart() {
+    public Button getStartButton() {
         return start;
     }
 
-    public Button getSettings() {
+    public Button getSettingsButton() {
         return settings;
     }
 
-    public Button getRecords() {
+    public Button getRecordsButton() {
         return records;
     }
 
-    public Button getExit() {
+    public Button getExitButton() {
         return exit;
     }
 
     private Menu(int windowWidth, int windowHeight) {
 
         setPrefSize(windowWidth, windowHeight);
-        this.windowWidth = windowWidth;
-        this.windowHeight = windowHeight;
+
 
         start = new Button("Начать игру", windowWidth);
         settings = new Button("Настройки", windowWidth);
@@ -52,8 +48,5 @@ public class Menu extends Pane {
         getChildren().add(menuBox);
         menuBox.setTranslateX(windowWidth / 2 - menuBox.getPrefWidth()/2);
         menuBox.setTranslateY(windowHeight / 2 - menuBox.getPrefHeight()/2);
-        System.out.println(menuBox.getPrefHeight());
-        System.out.println(menuBox.getPrefWidth());
-        System.out.println();
     }
 }
