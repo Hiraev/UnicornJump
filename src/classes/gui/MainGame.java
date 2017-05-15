@@ -20,7 +20,7 @@ public class MainGame extends Application {
     private Menu menuRoot;
     private Game game;
     private int lastPlatformY;
-//    private boolean pause;
+    private boolean pause;
 
     public static void main(String[] args) {
         launch(args);
@@ -102,28 +102,28 @@ public class MainGame extends Application {
 
         scene.setOnKeyPressed(event -> {
             if (!game.isGameOver()) {
-                if (event.getCode() == KeyCode.LEFT) {
-                    game.getCharacter().stopMove();
-                    game.getCharacter().move(MoveAnimation.DIRECTION.LEFT);
-                } else if (event.getCode() == KeyCode.RIGHT) {
-                    game.getCharacter().stopMove();
-                    game.getCharacter().move(MoveAnimation.DIRECTION.RIGHT);
+                if (!pause) {
+                    if (event.getCode() == KeyCode.LEFT) {
+                        game.getCharacter().stopMove();
+                        game.getCharacter().move(MoveAnimation.DIRECTION.LEFT);
+                    } else if (event.getCode() == KeyCode.RIGHT) {
+                        game.getCharacter().stopMove();
+                        game.getCharacter().move(MoveAnimation.DIRECTION.RIGHT);
+                    }
                 }
 
-//                if (event.getCode() == KeyCode.ESCAPE) {
-//                    if (!pause) {
-//                        game.pause();
-//                    } else {
-//                        game.continueGame();
-//                    }
-//                    pause = !pause;
-//                }
+                if (event.getCode() == KeyCode.ESCAPE) {
+                    if (!pause) {
+                        game.pause();
+                    } else {
+                        game.continueGame();
+                    }
+                    pause = !pause;
+                }
             }
-
-
         });
         scene.setOnKeyReleased(event -> {
-            if (!game.isGameOver()) {
+            if (!game.isGameOver() & !pause) {
                 if (event.getCode() == KeyCode.LEFT | event.getCode() == KeyCode.RIGHT) {
                     game.getCharacter().stopMove();
                 }
@@ -138,8 +138,7 @@ public class MainGame extends Application {
                 gameRoot.setVisible(false);
 
                 setUpGame();
-            } else //if (!pause)
-            {
+            } else if (!pause) {
                 int offset = newVal.intValue();
                 int delta = (oldVal.intValue() - offset);
                 if (Math.abs(offset) > gameRoot.getLayoutY() - WINDOW_HEIGHT / 3
