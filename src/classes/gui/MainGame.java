@@ -1,5 +1,6 @@
 package gui;
 
+import gui.menu.PauseScreen;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,6 +19,7 @@ public class MainGame extends Application {
     private Pane appRoot;
     private Pane gameRoot;
     private Menu menuRoot;
+    private PauseScreen pauseRoot;
     private Game game;
     private int lastPlatformY;
     private boolean pause;
@@ -32,6 +34,24 @@ public class MainGame extends Application {
             switcher();
             System.out.println("Clicked");
         });
+
+        menuRoot.getExitButton().setOnMouseClicked(event -> {
+            System.exit(0);
+        });
+
+        pauseRoot.getResume().setOnMouseClicked(event -> {
+            game.continueGame();
+            pauseRoot.setVisible(false);
+            pause = !pause;
+        });
+
+        pauseRoot.getExit().setOnMouseClicked(event -> {
+            game.over();
+            setUpGame();
+            menuRoot.setVisible(true);
+            pauseRoot.setVisible(false);
+            gameRoot.setVisible(false);
+        });
     }
 
     private void switcher() {
@@ -44,10 +64,14 @@ public class MainGame extends Application {
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot = new Pane();
         menuRoot = Menu.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        pauseRoot = PauseScreen.getInstance(WINDOW_WIDTH,WINDOW_HEIGHT);
+
         appRoot.getChildren().add(gameRoot);
         appRoot.getChildren().add(menuRoot);
+        appRoot.getChildren().add(pauseRoot);
 
         menuRoot.setVisible(true);
+        pauseRoot.setVisible(false);
         gameRoot.setVisible(false);
 
         game = Game.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -115,8 +139,13 @@ public class MainGame extends Application {
                 if (event.getCode() == KeyCode.ESCAPE) {
                     if (!pause) {
                         game.pause();
+
+                        pauseRoot.setVisible(true);
+                        pauseRoot.activateAnimation();
                     } else {
                         game.continueGame();
+
+                        pauseRoot.setVisible(false);
                     }
                     pause = !pause;
                 }
