@@ -23,4 +23,14 @@ public class BasicFadePlatform extends Platform {
     public void touch() {
 
     }
+
+    @Override
+    public void pause() {
+        opacityTransition.pause();
+    }
+
+    @Override
+    public void continueAnimation() {
+        opacityTransition.play();
+    }
 }

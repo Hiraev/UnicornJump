@@ -22,4 +22,8 @@ public abstract class Platform extends Rectangle {
     public abstract void play();
 
     public abstract void touch();
+
+    public abstract void pause();
+
+    public abstract void continueAnimation();
 }

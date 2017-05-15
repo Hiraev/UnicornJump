@@ -6,6 +6,7 @@ import javafx.util.Duration;
 public class VanishPlatform extends Platform {
     private int gameWidth;
     private OpacityTransition opacityTransition;
+
     public VanishPlatform(int gameWidth) {
         type = Type.Vanish;
         opacityTransition = new OpacityTransition(Duration.seconds(1), this);
@@ -18,9 +19,19 @@ public class VanishPlatform extends Platform {
 
     }
 
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void continueAnimation() {
+
+    }
+
     @Override
     public void touch() {
         opacityTransition.play();
-
     }
 }

@@ -12,4 +12,12 @@ public class ParallelTransitionThread implements Runnable{
     public void run() {
         transition.play();
     }
+
+    public void pause() {
+        transition.pause();
+    }
+
+    public void continueTransition(){
+        transition.play();
+    }
 }

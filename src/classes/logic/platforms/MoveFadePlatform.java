@@ -8,6 +8,8 @@ import javafx.util.Duration;
 
 
 public class MoveFadePlatform extends Platform {
+    private ParallelTransitionThread parallelTransitionThread;
+
     private TranslateTransition translateTransition;
 
     private Thread thread;
@@ -20,7 +22,7 @@ public class MoveFadePlatform extends Platform {
 
         translateTransition = new TranslateTransition(Duration.seconds(2), this);
         opacityTransition = new OpacityTransition(Duration.seconds(2), this);
-        ParallelTransitionThread parallelTransitionThread = new ParallelTransitionThread(translateTransition);
+        parallelTransitionThread = new ParallelTransitionThread(translateTransition);
         thread = new Thread(parallelTransitionThread);
 
 
@@ -37,6 +39,18 @@ public class MoveFadePlatform extends Platform {
     public void play() {
         thread.run();
         opacityTransition.play();
+    }
+
+    @Override
+    public void pause() {
+        opacityTransition.pause();
+        parallelTransitionThread.pause();
+    }
+
+    @Override
+    public void continueAnimation() {
+        opacityTransition.play();
+        parallelTransitionThread.continueTransition();
     }
 
     @Override

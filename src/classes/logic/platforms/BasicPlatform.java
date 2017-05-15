@@ -15,4 +15,14 @@ public class BasicPlatform extends Platform {
     public void touch() {
 
     }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void continueAnimation() {
+
+    }
 }

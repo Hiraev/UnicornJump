@@ -23,6 +23,16 @@ public class MovePlatform extends Platform {
     }
 
     @Override
+    public void pause() {
+        translateTransition.pause();
+    }
+
+    @Override
+    public void continueAnimation() {
+        translateTransition.play();
+    }
+
+    @Override
     public void touch() {
     }
 }
