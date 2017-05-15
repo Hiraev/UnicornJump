@@ -62,11 +62,6 @@ public class Game {
             platform.setTranslateY(lastPlatformY -= 150);
             platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
         }
-//        for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
-//            platform.play();
-//            platform.setTranslateY(lastPlatformY -= 150);
-//            platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
-//        }
     }
 
     /**
@@ -100,22 +95,22 @@ public class Game {
     }
 
     //Пауза
-//    public void pause() {
-//        timer.stop();
-//        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
-//            platform.pause();
-//        }
-//        character.pause();
-//
-//    }
-//
-//    public void continueGame() {
-//        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
-//            platform.continueAnimation();
-//        }
-//        character.continueAnimation();
-//        timer.start();
-//    }
+    public void pause() {
+        timer.stop();
+        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+            platform.pause();
+        }
+        character.pause();
+
+    }
+
+    public void continueGame() {
+        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+            platform.continueAnimation();
+        }
+        character.continueAnimation();
+        timer.start();
+    }
 
 
 
