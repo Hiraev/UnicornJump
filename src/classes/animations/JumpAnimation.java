@@ -30,6 +30,11 @@ public class JumpAnimation extends Transition {
         });
     }
 
+    @Override
+    public void pause() {
+        super.pause();
+        fallAnimation.pause();
+    }
 
     @Override
     protected void interpolate(double frac) {
@@ -44,6 +49,11 @@ public class JumpAnimation extends Transition {
         super.play();
     }
 
+    public void continueAnimation(){
+        if (isFalling()) fallAnimation.play();
+        else super.play();
+    }
+
     @Override
     public void stop() {                                    //Действия при насильной остановке прыжка
         currentPosition = node.getTranslateY() - maxValue;
@@ -53,7 +63,7 @@ public class JumpAnimation extends Transition {
     class FallAnimation extends Transition {
 
         public FallAnimation() {
-            setCycleDuration(Duration.seconds(1.5));
+            setCycleDuration(Duration.seconds(1));
         }
 
         @Override
