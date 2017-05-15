@@ -20,6 +20,8 @@ public class Button extends StackPane {
     public Button(String string, int windowWidth) {
         bg = new Rectangle(100, 40);
         bg.setFill(Color.ANTIQUEWHITE);
+        bg.setArcWidth(5);
+        bg.setArcHeight(5);
         fillTransition = new FillTransition(Duration.seconds(1), bg);
         fillTransition.setFromValue(Color.ANTIQUEWHITE);
         fillTransition.setToValue(Color.RED);
