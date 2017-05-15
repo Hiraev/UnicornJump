@@ -163,6 +163,7 @@ public class Game {
 
     public void over(){
         timer.stop();
+        character.pause();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         level = 1;
