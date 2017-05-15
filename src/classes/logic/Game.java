@@ -157,12 +157,16 @@ public class Game {
                 updateMap();
             }
         } else { //Если игра завершена
-            timer.stop();
-            character.setTranslateY(0);
-            character.setTranslateX(GAME_WIDTH / 2);
-            level = 1;
-            lastPlatformY = 0;
+            over();
         }
+    }
+
+    public void over(){
+        timer.stop();
+        character.setTranslateY(0);
+        character.setTranslateX(GAME_WIDTH / 2);
+        level = 1;
+        lastPlatformY = 0;
     }
 
     private void updateMap() {
