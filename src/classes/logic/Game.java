@@ -94,20 +94,29 @@ public class Game {
 
     //Начинаем игру
     public void play() {
+        gameOver = false;
         timer.start();
         character.jump();
     }
 
     //Пауза
-    public void stop() {
-        timer.stop();
-    }
+//    public void pause() {
+//        timer.stop();
+//        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+//            platform.pause();
+//        }
+//        character.pause();
+//
+//    }
+//
+//    public void continueGame() {
+//        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+//            platform.continueAnimation();
+//        }
+//        character.continueAnimation();
+//        timer.start();
+//    }
 
-    //Перезапуск игры
-    public void restart() {
-        gameOver = false;
-        timer.start();
-    }
 
 
     /**

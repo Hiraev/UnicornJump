@@ -20,6 +20,7 @@ public class MainGame extends Application {
     private Menu menuRoot;
     private Game game;
     private int lastPlatformY;
+//    private boolean pause;
 
     public static void main(String[] args) {
         launch(args);
@@ -109,9 +110,14 @@ public class MainGame extends Application {
                     game.getCharacter().move(MoveAnimation.DIRECTION.RIGHT);
                 }
 
-                if (event.getCode() == KeyCode.ESCAPE) {
-                    setUpMap();
-                }
+//                if (event.getCode() == KeyCode.ESCAPE) {
+//                    if (!pause) {
+//                        game.pause();
+//                    } else {
+//                        game.continueGame();
+//                    }
+//                    pause = !pause;
+//                }
             }
 
 
@@ -128,23 +134,17 @@ public class MainGame extends Application {
 
             if (game.isGameOver()) {
 
-                gameRoot.getChildren().clear();
-                game.restart();
-
                 menuRoot.setVisible(true);
                 gameRoot.setVisible(false);
 
-
                 setUpGame();
-            } else {
+            } else //if (!pause)
+            {
                 int offset = newVal.intValue();
                 int delta = (oldVal.intValue() - offset);
                 if (Math.abs(offset) > gameRoot.getLayoutY() - WINDOW_HEIGHT / 3
                         & !game.getCharacter().isFalling()) {
                     gameRoot.setLayoutY(gameRoot.getLayoutY() + delta);
-
-
-
                 }
 
             }
@@ -158,7 +158,6 @@ public class MainGame extends Application {
             if (lastPlatformY != game.getLastPlatformY()) {
                 setUpMap();
             }
-
         });
     }
 }
