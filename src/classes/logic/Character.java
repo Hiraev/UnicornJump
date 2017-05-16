@@ -38,6 +38,11 @@ public class Character extends Rectangle{
         moveAnimation.pause();
     }
 
+    public void stop() {
+        jumpAnimation.stop();
+        moveAnimation.stop();
+    }
+
     public void continueAnimation(){
         jumpAnimation.continueAnimation();
     }
