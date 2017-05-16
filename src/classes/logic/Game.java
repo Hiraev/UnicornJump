@@ -2,16 +2,19 @@ package logic;
 
 import javafx.animation.AnimationTimer;
 import javafx.geometry.Bounds;
+import logic.barriers.Barrier;
+import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
 public class Game {
     private static int LEVEL_HEIGHT = 20;   //Высота каждого уровня (кол-во платформ на уровень)
+    private static int DISTANCE_BETWEEN_PLATFORMS = 150;
     private boolean gameOver;               //Игра закончена или еще идет
     private LevelGenerator levelGenerator;    //Генератор карты
 
     private int level;                      //Уровень (номер)
     private int score;                      //Очки
-    private int bonuses;                    //Бонусы
+    private int bonusScore;                    //Бонусы
     public Character character;             //Персонаж
     private final AnimationTimer timer;     //Игровое время
     public final int GAME_WIDTH;            //Ширина игрового поля
@@ -59,8 +62,27 @@ public class Game {
         for (int i = platformListSize - LEVEL_HEIGHT; i < platformListSize; i++) {
             Platform platform = levelGenerator.getLevel().getPlatforms().get(i);
             platform.play();
-            platform.setTranslateY(lastPlatformY -= 150);
+            platform.setTranslateY(lastPlatformY -= DISTANCE_BETWEEN_PLATFORMS);
             platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
+        }
+    }
+
+    private void bonusDistributor() {
+        for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
+            bonus.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
+            bonus.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * LEVEL_HEIGHT);
+        }
+    }
+
+    private void barrierDistributor() {
+        for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
+
+            /**
+             * Здесь нужно исключить установку координат по х для движущихся платформ
+             */
+            barrier.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
+            barrier.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * LEVEL_HEIGHT);
+            barrier.action();
         }
     }
 
@@ -80,6 +102,8 @@ public class Game {
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         platformDistributor();
+        bonusDistributor();
+        barrierDistributor();
     }
 
 
@@ -100,6 +124,12 @@ public class Game {
         for (Platform platform : levelGenerator.getLevel().getPlatforms()){
             platform.pause();
         }
+        for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
+            bonus.pause();
+        }
+        for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
+            barrier.pause();
+        }
         character.pause();
 
     }
@@ -107,6 +137,12 @@ public class Game {
     public void continueGame() {
         for (Platform platform : levelGenerator.getLevel().getPlatforms()){
             platform.continueAnimation();
+        }
+        for (Bonus bonus : levelGenerator.getLevel().getBonuses()){
+            bonus.continueAnimation();
+        }
+        for (Barrier barrier : levelGenerator.getLevel().getBarriers()){
+            barrier.continueAnimation();
         }
         character.continueAnimation();
         timer.start();
@@ -119,6 +155,37 @@ public class Game {
      */
     private void update() {
         if (!gameOver) {
+            Bounds ub = character.getBoundsInParent();
+
+
+            /**
+             * ОБАБОТКА СТОЛКНОВЕНИЙ С БОНУСАМИ
+             */
+            for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
+                   Bounds bb = bonus.getBoundsInParent();
+                    if (bb.intersects(ub)) {
+                        bonusScore += bonus.getScore();
+                        bonus.vanish();
+                        System.out.println(bonusScore);
+                    }
+            }
+
+
+            /**
+             * ОБРАБОТКА СТОЛКНОВЕНИЙ С ПРЕПЯТСТВИЯМИ
+             *
+             */
+            for (Barrier bonus : levelGenerator.getLevel().getBarriers()) {
+                Bounds bb = bonus.getBoundsInParent();
+                if (bb.intersects(ub)) {
+                    gameOver = true;
+                }
+            }
+
+
+            /**
+             * ОБРАОТКА СТОЛКНОВЕНИЙ С ПЛАТФОРМАМИ
+             */
 
 
             for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
@@ -126,11 +193,12 @@ public class Game {
 
                 if (character.isFalling()) {
 
-                    Bounds ub = character.getBoundsInParent();
+
                     Bounds pb = platform.getBoundsInParent();
                     //Страшные условия. Короче, прыгать, когда низ персонажа оказывается
                     // внутри платформы, и он сам находится хотя бы на 3/4 внутри платформы
-                    if ((pb.getMinX() < (ub.getMaxX() - character.getWidth() / 4) & pb.getMaxX() > (ub.getMinX()) + character.getWidth() / 4) &
+                    if ((pb.getMinX() < (ub.getMaxX() - character.getWidth() / 4) &
+                            pb.getMaxX() > (ub.getMinX()) + character.getWidth() / 4) &
                             pb.getMinY() <= ub.getMaxY() &
                             pb.getMinY() >= ub.getMinY()) {
                         character.jump();
@@ -162,8 +230,10 @@ public class Game {
     }
 
     public void over(){
+        bonusScore = 0;
+        score = 0;
         timer.stop();
-        character.pause();
+        character.stop();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         level = 1;
@@ -171,12 +241,10 @@ public class Game {
     }
 
     private void updateMap() {
-        System.out.println("Update");
-        System.out.println(levelGenerator.getLevel().getPlatforms().size());
         levelGenerator.updateLevel();
-
         platformDistributor();
-        System.out.println(levelGenerator.getLevel().getPlatforms().size());
+        bonusDistributor();
+        barrierDistributor();
     }
 
     /**
