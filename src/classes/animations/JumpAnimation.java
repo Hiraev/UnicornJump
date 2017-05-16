@@ -57,6 +57,7 @@ public class JumpAnimation extends Transition {
     @Override
     public void stop() {                                    //Действия при насильной остановке прыжка
         currentPosition = node.getTranslateY() - maxValue;
+        fallAnimation.stop();
         super.stop();
     }
 
