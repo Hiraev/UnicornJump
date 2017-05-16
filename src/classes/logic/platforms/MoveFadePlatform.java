@@ -1,18 +1,16 @@
 package logic.platforms;
 
 import animations.OpacityTransition;
-import animations.ParallelTransitionThread;
 import javafx.animation.Animation;
+import javafx.animation.ParallelTransition;
 import javafx.animation.TranslateTransition;
 import javafx.util.Duration;
 
 
 public class MoveFadePlatform extends Platform {
-    private ParallelTransitionThread parallelTransitionThread;
+    private ParallelTransition parallelTransition;
 
     private TranslateTransition translateTransition;
-
-    private Thread thread;
 
     private OpacityTransition opacityTransition;
 
@@ -22,8 +20,6 @@ public class MoveFadePlatform extends Platform {
 
         translateTransition = new TranslateTransition(Duration.seconds(2), this);
         opacityTransition = new OpacityTransition(Duration.seconds(2), this);
-        parallelTransitionThread = new ParallelTransitionThread(translateTransition);
-        thread = new Thread(parallelTransitionThread);
 
 
         opacityTransition.setAutoReverse(true);
@@ -33,24 +29,24 @@ public class MoveFadePlatform extends Platform {
         translateTransition.setCycleCount(Animation.INDEFINITE);
         translateTransition.setByX(windowWidth / 10);
         translateTransition.setToX(windowWidth - windowWidth / 10);
+
+        parallelTransition = new ParallelTransition();
+        parallelTransition.getChildren().addAll(opacityTransition, translateTransition);
     }
 
     @Override
     public void play() {
-        thread.run();
-        opacityTransition.play();
+        parallelTransition.play();
     }
 
     @Override
     public void pause() {
-        opacityTransition.pause();
-        parallelTransitionThread.pause();
+        parallelTransition.pause();
     }
 
     @Override
     public void continueAnimation() {
-        opacityTransition.play();
-        parallelTransitionThread.continueTransition();
+        parallelTransition.play();
     }
 
     @Override
