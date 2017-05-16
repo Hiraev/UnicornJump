@@ -10,6 +10,8 @@ import javafx.stage.Stage;
 import gui.menu.Menu;
 import logic.Game;
 import animations.MoveAnimation;
+import logic.barriers.Barrier;
+import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
 
@@ -47,6 +49,7 @@ public class MainGame extends Application {
 
         pauseRoot.getExit().setOnMouseClicked(event -> {
             game.over();
+            pause = !pause;
             setUpGame();
             menuRoot.setVisible(true);
             pauseRoot.setVisible(false);
@@ -64,7 +67,7 @@ public class MainGame extends Application {
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameRoot = new Pane();
         menuRoot = Menu.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
-        pauseRoot = PauseScreen.getInstance(WINDOW_WIDTH,WINDOW_HEIGHT);
+        pauseRoot = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         appRoot.getChildren().add(gameRoot);
         appRoot.getChildren().add(menuRoot);
@@ -92,6 +95,13 @@ public class MainGame extends Application {
         for (Platform platform : game.getLevelMap().getPlatforms()) {
             gameRoot.getChildren().add(platform);
         }
+        for (Bonus bonus : game.getLevelMap().getBonuses()) {
+            gameRoot.getChildren().add(bonus);
+        }
+
+        for (Barrier barrier : game.getLevelMap().getBarriers()) {
+            gameRoot.getChildren().add(barrier);
+        }
         gameRoot.getChildren().add(game.getCharacter());
         //Берем координаты последней платформы
         //Далее будем проверять не меняется ли она
@@ -106,9 +116,7 @@ public class MainGame extends Application {
 
     private void setUpGame() {
         setUpMap();
-
-        gameRoot.setLayoutX(0);
-        gameRoot.setLayoutY(0);
+        gameRoot.setLayoutY(WINDOW_HEIGHT / 2);
     }
 
     @Override
@@ -119,7 +127,6 @@ public class MainGame extends Application {
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
 
-        gameRoot.setLayoutY(300);
 
         primaryStage.show();
 
