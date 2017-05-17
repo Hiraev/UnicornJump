@@ -1,5 +1,6 @@
 package gui;
 
+import gui.menu.GameOverScreen;
 import gui.menu.PauseScreen;
 import javafx.application.Application;
 import javafx.scene.Parent;
@@ -7,7 +8,7 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import gui.menu.Menu;
+import gui.menu.GeneralScreen;
 import logic.Game;
 import animations.MoveAnimation;
 import logic.barriers.Barrier;
@@ -19,9 +20,10 @@ public class MainGame extends Application {
     static int WINDOW_WIDTH = 400;
     static int WINDOW_HEIGHT = 600;
     private Pane appRoot;
-    private Pane gameRoot;
-    private Menu menuRoot;
-    private PauseScreen pauseRoot;
+    private Pane gameScreen;
+    private GeneralScreen generalScreen;
+    private PauseScreen pauseScreen;
+    private GameOverScreen gameOverScreen;
     private Game game;
     private int lastPlatformY;
     private boolean pause;
@@ -31,51 +33,62 @@ public class MainGame extends Application {
     }
 
     private void setUpButtons() {
-        menuRoot.getStartButton().setOnMouseClicked(event -> {
+        generalScreen.getStartButton().setOnMouseClicked(event -> {
             game.play();
-            switcher();
-            System.out.println("Clicked");
+            generalScreen.setVisible(false);
+            gameScreen.setVisible(true);
         });
 
-        menuRoot.getExitButton().setOnMouseClicked(event -> {
+        generalScreen.getExitButton().setOnMouseClicked(event -> {
             System.exit(0);
         });
 
-        pauseRoot.getResume().setOnMouseClicked(event -> {
+        pauseScreen.getResume().setOnMouseClicked(event -> {
             game.continueGame();
-            pauseRoot.setVisible(false);
+            pauseScreen.setVisible(false);
             pause = !pause;
         });
 
-        pauseRoot.getExit().setOnMouseClicked(event -> {
+        pauseScreen.getExit().setOnMouseClicked(event -> {
             game.over();
             pause = !pause;
             setUpGame();
-            menuRoot.setVisible(true);
-            pauseRoot.setVisible(false);
-            gameRoot.setVisible(false);
+            generalScreen.setVisible(true);
+            pauseScreen.setVisible(false);
+            gameScreen.setVisible(false);
+        });
+
+        gameOverScreen.getRestart().setOnMouseClicked(event -> {
+            game.play();
+            gameOverScreen.setVisible(false);
+            gameScreen.setVisible(true);
+        });
+
+        gameOverScreen.getExit().setOnMouseClicked(event -> {
+            gameOverScreen.setVisible(false);
+            generalScreen.setVisible(true);
         });
     }
 
-    private void switcher() {
-        menuRoot.setVisible(false);
-        gameRoot.setVisible(true);
-    }
+
 
     private Parent setUp() {
         appRoot = new Pane();
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
-        gameRoot = new Pane();
-        menuRoot = Menu.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
-        pauseRoot = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        gameScreen = new Pane();
+        generalScreen = GeneralScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        pauseScreen = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        gameOverScreen = GameOverScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        appRoot.getChildren().add(gameRoot);
-        appRoot.getChildren().add(menuRoot);
-        appRoot.getChildren().add(pauseRoot);
+        appRoot.getChildren().add(gameScreen);
+        appRoot.getChildren().add(generalScreen);
+        appRoot.getChildren().add(pauseScreen);
+        appRoot.getChildren().add(gameOverScreen);
 
-        menuRoot.setVisible(true);
-        pauseRoot.setVisible(false);
-        gameRoot.setVisible(false);
+        generalScreen.setVisible(true);
+        pauseScreen.setVisible(false);
+        gameScreen.setVisible(false);
+        gameOverScreen.setVisible(false);
 
         game = Game.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
 
@@ -91,18 +104,18 @@ public class MainGame extends Application {
      */
     private void setUpMap() {
 
-        gameRoot.getChildren().clear();
+        gameScreen.getChildren().clear();
         for (Platform platform : game.getLevelMap().getPlatforms()) {
-            gameRoot.getChildren().add(platform);
+            gameScreen.getChildren().add(platform);
         }
         for (Bonus bonus : game.getLevelMap().getBonuses()) {
-            gameRoot.getChildren().add(bonus);
+            gameScreen.getChildren().add(bonus);
         }
 
         for (Barrier barrier : game.getLevelMap().getBarriers()) {
-            gameRoot.getChildren().add(barrier);
+            gameScreen.getChildren().add(barrier);
         }
-        gameRoot.getChildren().add(game.getCharacter());
+        gameScreen.getChildren().add(game.getCharacter());
         //Берем координаты последней платформы
         //Далее будем проверять не меняется ли она
         //Если изменится, то обновим карту
@@ -116,14 +129,14 @@ public class MainGame extends Application {
 
     private void setUpGame() {
         setUpMap();
-        gameRoot.setLayoutY(WINDOW_HEIGHT / 2);
+        gameScreen.setLayoutY(WINDOW_HEIGHT / 2);
     }
 
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(setUp());
         //Пока уберем стили
-        //scene.getStylesheets().add("file:src/styles/main.css");
+        scene.getStylesheets().add("file:src/styles/main.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
 
@@ -147,12 +160,12 @@ public class MainGame extends Application {
                     if (!pause) {
                         game.pause();
 
-                        pauseRoot.setVisible(true);
-                        pauseRoot.activateAnimation();
+                        pauseScreen.setVisible(true);
+                        pauseScreen.activateAnimation();
                     } else {
                         game.continueGame();
 
-                        pauseRoot.setVisible(false);
+                        pauseScreen.setVisible(false);
                     }
                     pause = !pause;
                 }
@@ -169,19 +182,18 @@ public class MainGame extends Application {
         game.getCharacter().translateYProperty().addListener((value, oldVal, newVal) -> {
 
             if (game.isGameOver()) {
-
-                menuRoot.setVisible(true);
-                gameRoot.setVisible(false);
+                gameOverScreen.setScore(game.getScore());
+                gameOverScreen.setVisible(true);
+                gameScreen.setVisible(false);
 
                 setUpGame();
             } else if (!pause) {
                 int offset = newVal.intValue();
                 int delta = (oldVal.intValue() - offset);
-                if (Math.abs(offset) > gameRoot.getLayoutY() - WINDOW_HEIGHT / 3
+                if (Math.abs(offset) > gameScreen.getLayoutY() - WINDOW_HEIGHT / 3
                         & !game.getCharacter().isFalling()) {
-                    gameRoot.setLayoutY(gameRoot.getLayoutY() + delta);
+                    gameScreen.setLayoutY(gameScreen.getLayoutY() + delta);
                 }
-
             }
 
             /**
