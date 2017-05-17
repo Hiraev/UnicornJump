@@ -45,9 +45,9 @@ public class PauseScreen extends Pane {
         fillTransition.setToValue(new Color(0,0,0,0.6));
 
 
-        resume = new Button("Продолжить", windowWidth);
-        settings = new Button("Настройки", windowWidth);
-        exit = new Button("Выйти", windowWidth);
+        resume = new Button("Продолжить");
+        settings = new Button("Настройки");
+        exit = new Button("Выйти");
 
         menuBox = new MenuBox(resume, settings, exit);
         getChildren().addAll(rectangle,menuBox);
