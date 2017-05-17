@@ -1,4 +1,12 @@
-#button{
-    -fx-background-color: red;
-    -fx-font: 30px "Arial";
+#button {
+    -fx-font: 15px "Impact";
+}
+
+#scoreText {
+    -fx-font: 25px "Comic Sans MS";
+}
+
+#scoreTextScore {
+    -fx-font: 40px "Comic Sans MS";
+    -fx-fill: rgb(144, 123, 142);
 }
