@@ -113,6 +113,8 @@ public class Game {
 
     //Начинаем игру
     public void play() {
+        bonusScore = 0;
+        score = 0;
         gameOver = false;
         timer.start();
         character.jump();
@@ -230,8 +232,6 @@ public class Game {
     }
 
     public void over(){
-        bonusScore = 0;
-        score = 0;
         timer.stop();
         character.stop();
         character.setTranslateY(0);
@@ -267,5 +267,8 @@ public class Game {
 
     public boolean isGameOver() {
         return gameOver;
+    }
+    public int getScore() {
+        return score + bonusScore;
     }
 }
