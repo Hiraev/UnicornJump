@@ -6,6 +6,12 @@ public abstract class Bonus extends Rectangle {
     protected static int windowWidth;
     private static int size = 20;
 
+    protected Type type;
+
+    public enum Type {
+        Rainbow, Star
+    }
+
     public Bonus(int windowWidth) {
         Bonus.windowWidth = windowWidth;
         setWidth(size);
@@ -13,13 +19,17 @@ public abstract class Bonus extends Rectangle {
     }
 
     public abstract int getScore();
+
     public abstract void pause();
+
     public abstract void continueAnimation();
 
-    public void vanish(){
+    public void vanish() {
         //Убираем бонус подальше
         setTranslateX(3 * windowWidth);
     }
 
-
+    public Type getType() {
+        return type;
+    }
 }
