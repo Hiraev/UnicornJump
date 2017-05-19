@@ -7,30 +7,28 @@ import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
 public class Game {
-    private static int LEVEL_HEIGHT = 20;   //Высота каждого уровня (кол-во платформ на уровень)
-    private static int DISTANCE_BETWEEN_PLATFORMS = 150;
+    private static int LEVEL_HEIGHT = 5;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
     private LevelGenerator levelGenerator;    //Генератор карты
+    private Character character;             //Персонаж
+    private final AnimationTimer timer;     //Игровое время
 
     private int level;                      //Уровень (номер)
     private int score;                      //Очки
     private int bonusScore;                    //Бонусы
-    public Character character;             //Персонаж
-    private final AnimationTimer timer;     //Игровое время
     public final int GAME_WIDTH;            //Ширина игрового поля
     public final int GAME_HEIGHT;           //Высота игрового поля
     private static Game instance;           //Статическое поле игры, игра одна, поэтому нет смысла создавать много
-
-    private int lastPlatformY;           //Позиция (Y) последней платформы
     private int minPosition;
 
 
     /**
      * ПОПРОБОВАТЬ НАЙТИ ИНОЙ СПОСОБ ОБНОВЛЕНИЯ КАРТЫ В MainGame
+     *
      * @return
      */
     public int getLastPlatformY() {
-        return lastPlatformY;
+        return levelGenerator.getLastPlatformY();
     }
 
     public static Game getInstance(int width, int height) {
@@ -55,55 +53,23 @@ public class Game {
         };
     }
 
-    //Устанавливаем позиции всех платформ
-    private void platformDistributor() {
-        int platformListSize = levelGenerator.getLevel().getPlatforms().size();
-        //Цикл устроен таким образом, чтобы не менять позиции платформ, которые были добавлены в предыдущем уровне
-        for (int i = platformListSize - LEVEL_HEIGHT; i < platformListSize; i++) {
-            Platform platform = levelGenerator.getLevel().getPlatforms().get(i);
-            platform.play();
-            platform.setTranslateY(lastPlatformY -= DISTANCE_BETWEEN_PLATFORMS);
-            platform.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
-        }
-    }
-
-    private void bonusDistributor() {
-        for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
-            bonus.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
-            bonus.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * LEVEL_HEIGHT);
-        }
-    }
-
-    private void barrierDistributor() {
-        for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
-
-            /**
-             * Здесь нужно исключить установку координат по х для движущихся платформ
-             */
-            barrier.setTranslateX(Math.random() * (GAME_WIDTH - 2 * GAME_WIDTH / 10) + GAME_WIDTH / 10);
-            barrier.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * LEVEL_HEIGHT);
-            barrier.action();
-        }
-    }
 
     /**
      * НАСТРОЙКА УРОВНЯ
+     * Ставим уровень на 1
+     * Перезагружаем карту
+     * Ставим персонажа посередине экрана
+     * ближе к нижней части
      */
     private void setUpGame() {
-        lastPlatformY = 0;
+        levelGenerator.resetLastPlatformY();
         gameOver = false;
         level = 1;
-        //Ставим уровень на 1
-        //Перезагружаем карту
-        //Ставим персонажа посередине экрана
-        //ближе к нижней части
 
         character = Character.getInstance();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
-        platformDistributor();
-        bonusDistributor();
-        barrierDistributor();
+        levelGenerator.levelDistributor();
     }
 
 
@@ -111,7 +77,6 @@ public class Game {
      * УПРАВЛЯЮЩИЕ МЕТОДЫ
      */
 
-    //Начинаем игру
     public void play() {
         bonusScore = 0;
         score = 0;
@@ -123,7 +88,7 @@ public class Game {
     //Пауза
     public void pause() {
         timer.stop();
-        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+        for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
             platform.pause();
         }
         for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
@@ -137,13 +102,13 @@ public class Game {
     }
 
     public void continueGame() {
-        for (Platform platform : levelGenerator.getLevel().getPlatforms()){
+        for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
             platform.continueAnimation();
         }
-        for (Bonus bonus : levelGenerator.getLevel().getBonuses()){
+        for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
             bonus.continueAnimation();
         }
-        for (Barrier barrier : levelGenerator.getLevel().getBarriers()){
+        for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
             barrier.continueAnimation();
         }
         character.continueAnimation();
@@ -151,100 +116,103 @@ public class Game {
     }
 
 
-
     /**
      * МЕТОДЫ, ВЫЗЫВАЕМЫЙ В КАЖДОМ КАДРЕ ИГРЫ
+     * Если игра не завершена вызываем методы обработки:
+     * столкновений с платформами - collisionWithPlatforms
+     * столкновений с препятствиями - collisionWithBarriers
+     * столкновений с бонусами - collisionWithBonuses
+     * <p>
+     * Далее обновляется минимальная позиция, в которой может
+     * находится игрок, там же идет подсчет очков
+     * <p>
+     * Если игрок приближается к последней платформе, то карта
+     * обновляется
+     * <p>
+     * При завершении игры вызывается метод over
      */
     private void update() {
         if (!gameOver) {
             Bounds ub = character.getBoundsInParent();
 
-
-            /**
-             * ОБАБОТКА СТОЛКНОВЕНИЙ С БОНУСАМИ
-             */
-            for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
-                   Bounds bb = bonus.getBoundsInParent();
-                    if (bb.intersects(ub)) {
-                        bonusScore += bonus.getScore();
-                        bonus.vanish();
-                        System.out.println(bonusScore);
-                    }
-            }
-
-
-            /**
-             * ОБРАБОТКА СТОЛКНОВЕНИЙ С ПРЕПЯТСТВИЯМИ
-             *
-             */
-            for (Barrier bonus : levelGenerator.getLevel().getBarriers()) {
-                Bounds bb = bonus.getBoundsInParent();
-                if (bb.intersects(ub)) {
-                    gameOver = true;
-                }
-            }
-
-
-            /**
-             * ОБРАОТКА СТОЛКНОВЕНИЙ С ПЛАТФОРМАМИ
-             */
-
-
-            for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
-
-
-                if (character.isFalling()) {
-
-
-                    Bounds pb = platform.getBoundsInParent();
-                    //Страшные условия. Короче, прыгать, когда низ персонажа оказывается
-                    // внутри платформы, и он сам находится хотя бы на 3/4 внутри платформы
-                    if ((pb.getMinX() < (ub.getMaxX() - character.getWidth() / 4) &
-                            pb.getMaxX() > (ub.getMinX()) + character.getWidth() / 4) &
-                            pb.getMinY() <= ub.getMaxY() &
-                            pb.getMinY() >= ub.getMinY()) {
-                        character.jump();
-                        platform.touch();
-                    }
-
-                    //Условие завершения игры
-                    if (character.getTranslateY() > minPosition + GAME_HEIGHT * 3 / 4) {
-                        gameOver = true;
-                    }
-                }
-
-            }
+            collisionWithPlatforms(ub);
+            collisionWithBonuses(ub);
+            collisionWithBarriers(ub);
 
             if (!character.isFalling()) {
-                //Меняем минимальную позицию, чтобы вычислить завершена игра или нет
                 minPosition = (int) character.getTranslateY();
-                //Очки
                 int newScore = (int) -character.getTranslateY() / 100;
                 if (newScore > score) score = newScore;
             }
-            //Обновляем карту при приближении к последней платформе
-            if (character.getTranslateY() < lastPlatformY) {
+            if (character.getTranslateY() < levelGenerator.getLastPlatformY()) {
                 updateMap();
             }
-        } else { //Если игра завершена
-            over();
+        } else over();
+    }
+
+
+    /**
+     * ОБРАБОТКА СТОЛКНОВЕНИЙ С ПЛАТФОРМАМИ
+     */
+    private void collisionWithPlatforms(Bounds ub) {
+        for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
+            if (character.isFalling()) {
+                Bounds pb = platform.getBoundsInParent();
+                //Страшные условия. Короче, прыгать, когда низ персонажа оказывается
+                // внутри платформы, и он сам находится хотя бы на 3/4 внутри платформы
+                if ((pb.getMinX() < (ub.getMaxX() - character.getWidth() / 4) &
+                        pb.getMaxX() > (ub.getMinX()) + character.getWidth() / 4) &
+                        pb.getMinY() <= ub.getMaxY() &
+                        pb.getMinY() >= ub.getMinY()) {
+                    character.jump();
+                    platform.touch();
+                }
+                //Условие завершения игры
+                if (character.getTranslateY() > minPosition + GAME_HEIGHT * 3 / 4) {
+                    gameOver = true;
+                }
+            }
         }
     }
 
-    public void over(){
+    /**
+     * ОБАБОТКА СТОЛКНОВЕНИЙ С БОНУСАМИ
+     */
+    private void collisionWithBonuses(Bounds ub) {
+        for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
+            Bounds bb = bonus.getBoundsInParent();
+            if (bb.intersects(ub)) {
+                bonusScore += bonus.getScore();
+                bonus.vanish();
+                System.out.println(bonusScore);
+            }
+        }
+    }
+
+    /**
+     * ОБРАБОТКА СТОЛКНОВЕНИЙ С ПРЕПЯТСТВИЯМИ
+     */
+    private void collisionWithBarriers(Bounds ub) {
+        for (Barrier bonus : levelGenerator.getLevel().getBarriers()) {
+            Bounds bb = bonus.getBoundsInParent();
+            if (bb.intersects(ub)) {
+                gameOver = true;
+            }
+        }
+    }
+
+    public void over() {
         timer.stop();
         character.stop();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         level = 1;
-        lastPlatformY = 0;
+        levelGenerator.resetLastPlatformY();
     }
 
     private void updateMap() {
         levelGenerator.updateLevel();
-        platformDistributor();
-        bonusDistributor();
-        barrierDistributor();
+        levelGenerator.levelDistributor();
     }
 
     /**
@@ -268,6 +236,7 @@ public class Game {
     public boolean isGameOver() {
         return gameOver;
     }
+
     public int getScore() {
         return score + bonusScore;
     }

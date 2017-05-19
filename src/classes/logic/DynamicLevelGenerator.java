@@ -17,6 +17,17 @@ public class DynamicLevelGenerator implements LevelGenerator {
     private int width;
     private LevelMap levelMap;
     private int level = 1;
+    private int lastPlatformY;
+    private int DISTANCE_BETWEEN_PLATFORMS = 150;
+
+    @Override
+    public void resetLastPlatformY() {
+        lastPlatformY = 0;
+    }
+    @Override
+    public int getLastPlatformY() {
+        return lastPlatformY;
+    }
 
 
     /**
@@ -85,5 +96,44 @@ public class DynamicLevelGenerator implements LevelGenerator {
         this.levelMap = new LevelMap(platforms, barriers, bonuses);
         return levelMap;
     }
+
+    @Override
+    public void levelDistributor() {
+        platformDistributor();
+        bonusDistributor();
+        barrierDistributor();
+    }
+
+    //Устанавливаем позиции всех платформ
+    private void platformDistributor() {
+        int platformListSize = levelMap.getPlatforms().size();
+        //Цикл устроен таким образом, чтобы не менять позиции платформ, которые были добавлены в предыдущем уровне
+        for (int i = platformListSize - height; i < platformListSize; i++) {
+            Platform platform = levelMap.getPlatforms().get(i);
+            platform.play();
+            platform.setTranslateY(lastPlatformY -= DISTANCE_BETWEEN_PLATFORMS);
+            platform.setTranslateX(Math.random() * (width - 2 * width / 10) + width / 10);
+        }
+    }
+
+    private void bonusDistributor() {
+        for (Bonus bonus : levelMap.getBonuses()) {
+            bonus.setTranslateX(Math.random() * (width - 2 * width / 10) + width / 10);
+            bonus.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * height);
+        }
+    }
+
+    private void barrierDistributor() {
+        for (Barrier barrier : levelMap.getBarriers()) {
+
+            /**
+             * Здесь нужно исключить установку координат по х для движущихся платформ
+             */
+            barrier.setTranslateX(Math.random() * (width - 2 * width / 10) + width / 10);
+            barrier.setTranslateY(lastPlatformY + Math.random() * DISTANCE_BETWEEN_PLATFORMS * height);
+            barrier.action();
+        }
+    }
+
 
 }
