@@ -11,7 +11,9 @@ public class LevelMap {
     private List<Barrier> barriers;                 //Препятствия
     private List<Bonus> bonuses;                    //Бонусы
 
-    protected LevelMap(List<Platform> platforms, List<Barrier> barriers, List<Bonus> bonuses) {
+    protected LevelMap(List<Platform> platforms,
+                       List<Barrier> barriers,
+                       List<Bonus> bonuses) {
         this.platforms = platforms;
         this.barriers = barriers;
         this.bonuses = bonuses;
@@ -29,5 +31,4 @@ public class LevelMap {
         return barriers;
     }
 
-    public void updateLevel(int level) {}
 }
