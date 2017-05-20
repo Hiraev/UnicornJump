@@ -36,4 +36,5 @@ public abstract class Bonus extends Rectangle implements Pausable, Continuable {
     public Type getType() {
         return type;
     }
+    public abstract int getFiresCount();
 }

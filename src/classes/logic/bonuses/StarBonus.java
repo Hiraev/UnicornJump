@@ -3,7 +3,7 @@ package logic.bonuses;
 
 public class StarBonus extends Bonus {
     private static int score = 10;
-
+    private static int firesCount = 2;
 
 
     public StarBonus(int windowWidth) {
@@ -14,6 +14,11 @@ public class StarBonus extends Bonus {
     @Override
     public int getScore() {
         return score;
+    }
+
+    @Override
+    public int getFiresCount() {
+        return firesCount;
     }
 
     @Override
