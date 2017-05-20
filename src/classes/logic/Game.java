@@ -13,7 +13,6 @@ public class Game {
     private Character character;             //Персонаж
     private final AnimationTimer timer;     //Игровое время
 
-    private int level;                      //Уровень (номер)
     private int score;                      //Очки
     private int bonusScore;                    //Бонусы
     public final int GAME_WIDTH;            //Ширина игрового поля
@@ -62,7 +61,6 @@ public class Game {
      */
     private void setUpGame() {
         gameOver = false;
-        level = 1;
         character = Character.getInstance();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
@@ -209,7 +207,6 @@ public class Game {
         character.stop();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
-        level = 1;
         levelGenerator.resetLastPlatformY();
     }
 
@@ -233,7 +230,7 @@ public class Game {
     }
 
     public int getLevel() {
-        return level;
+        return levelGenerator.getLevelNumber();
     }
 
     public boolean isGameOver() {
