@@ -19,6 +19,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
     private JumpAnimation jumpAnimation;    //Прыжки
     private MoveAnimation moveAnimation;    //Движение в стороны
     private static Character instance;      //Данный объект, может быть только один
+    private boolean readyToFire = true;
 
     private Character() {
         setWidth(width);
@@ -85,7 +86,12 @@ public class Character extends Rectangle implements Pausable, Continuable {
         countOfFires += count;
     }
 
+    public boolean isReadyToFire() {
+        return readyToFire;
+    }
+
     public void fire() {
+        readyToFire = false;
         if (countOfFires != 0) {
             fires.add(new Fire(getTranslateY()));
             countOfFires--;
@@ -100,9 +106,10 @@ public class Character extends Rectangle implements Pausable, Continuable {
         Fire(double currentPosition) {
             this.setRadius(5);
             this.setTranslateX(Character.this.getTranslateX() + width / 2);
-            this.translateTransition = new TranslateTransition(Duration.seconds(0.8), this);
+            this.translateTransition = new TranslateTransition(Duration.seconds(0.6), this);
             this.translateTransition.setOnFinished(event -> {
                 kill();
+                readyToFire = true;
             });
             go(currentPosition);
         }
@@ -114,7 +121,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
         }
 
         public void kill() {
-            this.setTranslateX(-200);
+            this.setTranslateY(Character.this.getTranslateY()+400);
             fires.remove(this);
         }
 
