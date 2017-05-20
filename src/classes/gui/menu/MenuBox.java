@@ -9,7 +9,7 @@ public class MenuBox extends VBox {
         setSpacing(10);
         getChildren().addAll(buttons);
         setPrefSize(100, (buttons[0].getPrefHeight() + 10) * buttons.length);
-        //setStyle("-fx-background-color: red;");
-        System.out.println(getPrefHeight());
+
+
     }
 }
