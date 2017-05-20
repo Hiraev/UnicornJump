@@ -27,8 +27,8 @@ public class MoveFadePlatform extends Platform {
 
         translateTransition.setAutoReverse(true);
         translateTransition.setCycleCount(Animation.INDEFINITE);
-        translateTransition.setByX(windowWidth / 10);
-        translateTransition.setToX(windowWidth - windowWidth / 10);
+        translateTransition.setFromX(windowWidth / 15);
+        translateTransition.setToX(windowWidth - windowWidth / 15 - getWidth());
 
         parallelTransition = new ParallelTransition();
         parallelTransition.getChildren().addAll(opacityTransition, translateTransition);

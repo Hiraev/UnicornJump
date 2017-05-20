@@ -13,8 +13,8 @@ public class MovePlatform extends Platform {
         translateTransition = new TranslateTransition(Duration.seconds(1.5), this);
         translateTransition.setAutoReverse(true);
         translateTransition.setCycleCount(Animation.INDEFINITE);
-        translateTransition.setByX(gameWidth / 10);
-        translateTransition.setToX(gameWidth - gameWidth / 10);
+        translateTransition.setFromX(gameWidth / 15);
+        translateTransition.setToX(gameWidth - gameWidth / 15 - getWidth());
     }
 
     @Override
