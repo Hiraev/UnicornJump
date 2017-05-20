@@ -11,4 +11,6 @@ public interface LevelGenerator {
     void resetLastPlatformY();
 
     int getLastPlatformY();
+
+    int getLevelNumber();
 }

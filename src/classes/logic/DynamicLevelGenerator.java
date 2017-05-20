@@ -82,6 +82,11 @@ public class DynamicLevelGenerator implements LevelGenerator {
     }
 
     @Override
+    public int getLevelNumber() {
+        return level - 1;
+    }
+
+    @Override
     public LevelMap getLevel() {
         return levelMap;
     }
