@@ -10,3 +10,13 @@
     -fx-font: 40px "Comic Sans MS";
     -fx-fill: rgb(144, 123, 142);
 }
+
+#statusVariable {
+    -fx-font: 17px "Comic Sans MS";
+    -fx-fill: rgb(64, 94, 135);
+}
+
+#statusInfo {
+    -fx-font: 12px "Comic Sans MS";
+    -fx-fill: rgb(64, 94, 142);
+}
