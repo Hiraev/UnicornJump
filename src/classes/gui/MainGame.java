@@ -17,7 +17,6 @@ import logic.barriers.Barrier;
 import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -142,11 +141,9 @@ public class MainGame extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         Scene scene = new Scene(setUp());
-        //Пока уберем стили
-        scene.getStylesheets().add("file:src/styles/main.css");
+        scene.getStylesheets().add("main.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-
 
         primaryStage.show();
 
