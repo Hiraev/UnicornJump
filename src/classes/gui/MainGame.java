@@ -2,6 +2,7 @@ package gui;
 
 import gui.menu.GameOverScreen;
 import gui.menu.PauseScreen;
+import gui.menu.StatusBar;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -28,6 +29,7 @@ public class MainGame extends Application {
     private GeneralScreen generalScreen;
     private PauseScreen pauseScreen;
     private GameOverScreen gameOverScreen;
+    private StatusBar statusBar;
     private Game game;
     private int lastPlatformY;
     private boolean pause;
@@ -41,6 +43,7 @@ public class MainGame extends Application {
             game.play();
             generalScreen.setVisible(false);
             gameScreen.setVisible(true);
+            statusBar.setVisible(true);
         });
 
         generalScreen.getExitButton().setOnMouseClicked(event -> {
@@ -60,12 +63,14 @@ public class MainGame extends Application {
             generalScreen.setVisible(true);
             pauseScreen.setVisible(false);
             gameScreen.setVisible(false);
+            statusBar.setVisible(false);
         });
 
         gameOverScreen.getRestart().setOnMouseClicked(event -> {
             game.play();
             gameOverScreen.setVisible(false);
             gameScreen.setVisible(true);
+            statusBar.setVisible(true);
         });
 
         gameOverScreen.getExit().setOnMouseClicked(event -> {
@@ -82,13 +87,12 @@ public class MainGame extends Application {
         generalScreen = GeneralScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         pauseScreen = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameOverScreen = GameOverScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        statusBar = new StatusBar(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        appRoot.getChildren().add(gameScreen);
-        appRoot.getChildren().add(generalScreen);
-        appRoot.getChildren().add(pauseScreen);
-        appRoot.getChildren().add(gameOverScreen);
+        appRoot.getChildren().addAll(gameScreen, statusBar, generalScreen, pauseScreen, gameOverScreen);
 
         generalScreen.setVisible(true);
+        statusBar.setVisible(false);
         pauseScreen.setVisible(false);
         gameScreen.setVisible(false);
         gameOverScreen.setVisible(false);
@@ -106,7 +110,7 @@ public class MainGame extends Application {
      * НЕТ ОТРИСОВКИ ПРЕГРАД И БОНУСОВ (ПРЕГРАД И БОНУСОВ САМИХ ПОКА ЕЩЕ НЕТ)
      */
     private void setUpMap() {
-
+        statusBar.setLevel(game.getLevel());
         gameScreen.getChildren().clear();
         for (Platform platform : game.getLevelMap().getPlatforms()) {
             gameScreen.getChildren().add(platform);
@@ -173,10 +177,10 @@ public class MainGame extends Application {
                     pause = !pause;
                 }
 
-                if (event.getCode() == KeyCode.SPACE) {
+                if (game.getCharacter().isReadyToFire() & !pause &event.getCode() == KeyCode.SPACE) {
                     game.getCharacter().fire();
                     List<Character.Fire> fires = game.getCharacter().getFires();
-                    if (!fires.isEmpty()) gameScreen.getChildren().addAll(fires);
+                    gameScreen.getChildren().addAll(fires);
                 }
             }
         });
@@ -194,6 +198,7 @@ public class MainGame extends Application {
                 gameOverScreen.setScore(game.getScore());
                 gameOverScreen.setVisible(true);
                 gameScreen.setVisible(false);
+                statusBar.setVisible(false);
 
                 setUpGame();
             } else if (!pause) {
@@ -204,6 +209,9 @@ public class MainGame extends Application {
                     gameScreen.setLayoutY(gameScreen.getLayoutY() + delta);
                 }
             }
+
+            statusBar.setScores(game.getScore());
+            statusBar.setFires(game.getCharacter().getCountOfFires());
 
             /**
              *  ПЕРЕРИСОВКА КАРТЫ
