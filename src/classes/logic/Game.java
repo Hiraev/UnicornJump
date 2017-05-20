@@ -7,7 +7,7 @@ import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
 public class Game {
-    private static int LEVEL_HEIGHT = 5;   //Высота каждого уровня (кол-во платформ на уровень)
+    private static int LEVEL_HEIGHT = 10;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
     private LevelGenerator levelGenerator;    //Генератор карты
     private Character character;             //Персонаж
@@ -44,7 +44,6 @@ public class Game {
         levelGenerator = new DynamicLevelGenerator(width, LEVEL_HEIGHT);
 
         setUpGame();
-
         timer = new AnimationTimer() {
             @Override
             public void handle(long now) {
@@ -62,10 +61,8 @@ public class Game {
      * ближе к нижней части
      */
     private void setUpGame() {
-        levelGenerator.resetLastPlatformY();
         gameOver = false;
         level = 1;
-
         character = Character.getInstance();
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
@@ -144,7 +141,7 @@ public class Game {
                 int newScore = (int) -character.getTranslateY() / 100;
                 if (newScore > score) score = newScore;
             }
-            if (character.getTranslateY() < levelGenerator.getLastPlatformY()) {
+            if (character.getTranslateY() < levelGenerator.getLastPlatformY() + 150) {
                 updateMap();
             }
         } else over();
@@ -184,7 +181,7 @@ public class Game {
             if (bb.intersects(ub)) {
                 bonusScore += bonus.getScore();
                 bonus.vanish();
-                System.out.println(bonusScore);
+               // System.out.println(bonusScore);
             }
         }
     }
