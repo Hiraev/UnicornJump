@@ -95,7 +95,6 @@ public class Game {
             barrier.pause();
         }
         character.pause();
-
     }
 
     public void continueGame() {
@@ -180,8 +179,8 @@ public class Game {
             Bounds bb = bonus.getBoundsInParent();
             if (bb.intersects(ub)) {
                 bonusScore += bonus.getScore();
+                character.plusCountOfFire(bonus.getFiresCount());
                 bonus.vanish();
-               // System.out.println(bonusScore);
             }
         }
     }
@@ -190,10 +189,17 @@ public class Game {
      * ОБРАБОТКА СТОЛКНОВЕНИЙ С ПРЕПЯТСТВИЯМИ
      */
     private void collisionWithBarriers(Bounds ub) {
-        for (Barrier bonus : levelGenerator.getLevel().getBarriers()) {
-            Bounds bb = bonus.getBoundsInParent();
+        for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
+            Bounds bb = barrier.getBoundsInParent();
             if (bb.intersects(ub)) {
                 gameOver = true;
+            }
+
+            for (Character.Fire fire : character.getFires()) {
+                if (bb.intersects(fire.getBoundsInParent())) {
+                    barrier.kill();
+                    fire.kill();
+                }
             }
         }
     }

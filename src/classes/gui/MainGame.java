@@ -9,11 +9,15 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import gui.menu.GeneralScreen;
+import logic.Character;
 import logic.Game;
 import animations.MoveAnimation;
 import logic.barriers.Barrier;
 import logic.bonuses.Bonus;
 import logic.platforms.Platform;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class MainGame extends Application {
@@ -69,7 +73,6 @@ public class MainGame extends Application {
             generalScreen.setVisible(true);
         });
     }
-
 
 
     private Parent setUp() {
@@ -129,7 +132,7 @@ public class MainGame extends Application {
 
     private void setUpGame() {
         setUpMap();
-        gameScreen.setLayoutY(WINDOW_HEIGHT / 2);
+        gameScreen.setLayoutY(WINDOW_HEIGHT / 3);
     }
 
     @Override
@@ -169,6 +172,12 @@ public class MainGame extends Application {
                     }
                     pause = !pause;
                 }
+
+                if (event.getCode() == KeyCode.SPACE) {
+                    game.getCharacter().fire();
+                    List<Character.Fire> fires = game.getCharacter().getFires();
+                    if (!fires.isEmpty()) gameScreen.getChildren().addAll(fires);
+                }
             }
         });
         scene.setOnKeyReleased(event -> {
@@ -190,7 +199,7 @@ public class MainGame extends Application {
             } else if (!pause) {
                 int offset = newVal.intValue();
                 int delta = (oldVal.intValue() - offset);
-                if (Math.abs(offset) > gameScreen.getLayoutY() - WINDOW_HEIGHT / 3
+                if (Math.abs(offset) > gameScreen.getLayoutY() - WINDOW_HEIGHT / 2
                         & !game.getCharacter().isFalling()) {
                     gameScreen.setLayoutY(gameScreen.getLayoutY() + delta);
                 }
