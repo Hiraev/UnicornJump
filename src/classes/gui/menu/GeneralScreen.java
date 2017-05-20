@@ -7,7 +7,6 @@ public class GeneralScreen extends Pane {
     private static GeneralScreen instance;
 
     private Button start;
-    private Button settings;
     private Button records;
     private Button exit;
 
@@ -20,10 +19,6 @@ public class GeneralScreen extends Pane {
 
     public Button getStartButton() {
         return start;
-    }
-
-    public Button getSettingsButton() {
-        return settings;
     }
 
     public Button getRecordsButton() {
@@ -40,11 +35,10 @@ public class GeneralScreen extends Pane {
 
 
         start = new Button("Начать игру");
-        settings = new Button("Настройки");
         records = new Button("Рекорды");
         exit = new Button("Выйти");
 
-        menuBox = new MenuBox(start, settings, records, exit);
+        menuBox = new MenuBox(start, records, exit);
         getChildren().add(menuBox);
         menuBox.setTranslateX(windowWidth / 2 - menuBox.getPrefWidth() / 2);
         menuBox.setTranslateY(windowHeight / 2 - menuBox.getPrefHeight() / 2);

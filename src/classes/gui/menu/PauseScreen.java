@@ -11,15 +11,10 @@ public class PauseScreen extends Pane {
     private static PauseScreen instance;
 
     private Button resume;
-    private Button settings;
     private Button exit;
 
     public Button getResume() {
         return resume;
-    }
-
-    public Button getSettings() {
-        return settings;
     }
 
     public Button getExit() {
@@ -41,21 +36,20 @@ public class PauseScreen extends Pane {
 
         rectangle = new Rectangle(windowWidth, windowHeight, Color.BLACK);
         fillTransition = new FillTransition(Duration.seconds(1), rectangle);
-        fillTransition.setFromValue(new Color(0,0,0,0));
-        fillTransition.setToValue(new Color(0,0,0,0.6));
+        fillTransition.setFromValue(new Color(0, 0, 0, 0));
+        fillTransition.setToValue(new Color(0, 0, 0, 0.6));
 
 
         resume = new Button("Продолжить");
-        settings = new Button("Настройки");
         exit = new Button("Выйти");
 
-        menuBox = new MenuBox(resume, settings, exit);
-        getChildren().addAll(rectangle,menuBox);
-        menuBox.setTranslateX(windowWidth / 2 - menuBox.getPrefWidth()/2);
-        menuBox.setTranslateY(windowHeight / 2 - menuBox.getPrefHeight()/2);
+        menuBox = new MenuBox(resume, exit);
+        getChildren().addAll(rectangle, menuBox);
+        menuBox.setTranslateX(windowWidth / 2 - menuBox.getPrefWidth() / 2);
+        menuBox.setTranslateY(windowHeight / 2 - menuBox.getPrefHeight() / 2);
     }
 
-    public void activateAnimation(){
+    public void activateAnimation() {
         fillTransition.play();
     }
 }
