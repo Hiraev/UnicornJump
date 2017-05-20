@@ -33,6 +33,7 @@ public abstract class Barrier extends Rectangle implements Pausable, Continuable
     public abstract void continueIt();
 
     public void kill() {
-        setTranslateX(windowWidth * 2);
+        setTranslateX(3 * windowWidth);
+        pause();
     }
 }
