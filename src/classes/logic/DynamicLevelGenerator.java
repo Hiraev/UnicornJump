@@ -162,8 +162,8 @@ public class DynamicLevelGenerator implements LevelGenerator {
          */
         for (int i = 0; i < height - 1; i++) {
             double randomForBarrier = Math.random() * (1 - ((double) (1 / level)));
-            if (randomForBarrier > 0.9) barriers.add(new MoveBarrier(width));
-            else if (randomForBarrier > 0.7) barriers.add(new StaticBarrier(width));
+            if (randomForBarrier > 0.8) barriers.add(new MoveBarrier(width));
+            else if (randomForBarrier > 0.6) barriers.add(new StaticBarrier(width));
 
             double randomForBonus = Math.random();
             if (randomForBonus > 0.95) bonuses.add(new RainbowBonus(width));
