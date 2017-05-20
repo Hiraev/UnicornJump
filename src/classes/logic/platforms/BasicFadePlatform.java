@@ -30,7 +30,7 @@ public class BasicFadePlatform extends Platform {
     }
 
     @Override
-    public void continueAnimation() {
+    public void continueIt() {
         opacityTransition.play();
     }
 }

@@ -1,8 +1,10 @@
 package logic.bonuses;
 
 import javafx.scene.shape.Rectangle;
+import logic.Continuable;
+import logic.Pausable;
 
-public abstract class Bonus extends Rectangle {
+public abstract class Bonus extends Rectangle implements Pausable, Continuable {
     protected static int windowWidth;
     private static int size = 20;
 
@@ -20,9 +22,11 @@ public abstract class Bonus extends Rectangle {
 
     public abstract int getScore();
 
+    @Override
     public abstract void pause();
 
-    public abstract void continueAnimation();
+    @Override
+    public abstract void continueIt();
 
     public void vanish() {
         //Убираем бонус подальше

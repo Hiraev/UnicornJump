@@ -5,7 +5,7 @@ import animations.MoveAnimation;
 import javafx.scene.shape.Rectangle;
 
 
-public class Character extends Rectangle{
+public class Character extends Rectangle implements Pausable, Continuable{
     private int width = 40;
     private int height = 40;
     private JumpAnimation jumpAnimation;    //Прыжки
@@ -33,18 +33,20 @@ public class Character extends Rectangle{
         moveAnimation.play();
     }
 
+    @Override
     public void pause() {
         jumpAnimation.pause();
         moveAnimation.pause();
     }
 
+    @Override
+    public void continueIt() {
+        jumpAnimation.continueAnimation();
+    }
+
     public void stop() {
         jumpAnimation.stop();
         moveAnimation.stop();
-    }
-
-    public void continueAnimation(){
-        jumpAnimation.continueAnimation();
     }
 
     public void stopMove() {

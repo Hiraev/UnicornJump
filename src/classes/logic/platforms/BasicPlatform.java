@@ -22,7 +22,7 @@ public class BasicPlatform extends Platform {
     }
 
     @Override
-    public void continueAnimation() {
+    public void continueIt() {
 
     }
 }

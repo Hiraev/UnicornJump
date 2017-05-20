@@ -28,7 +28,7 @@ public class MovePlatform extends Platform {
     }
 
     @Override
-    public void continueAnimation() {
+    public void continueIt() {
         translateTransition.play();
     }
 

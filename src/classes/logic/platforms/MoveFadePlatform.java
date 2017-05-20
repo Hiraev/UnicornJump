@@ -45,7 +45,7 @@ public class MoveFadePlatform extends Platform {
     }
 
     @Override
-    public void continueAnimation() {
+    public void continueIt() {
         parallelTransition.play();
     }
 

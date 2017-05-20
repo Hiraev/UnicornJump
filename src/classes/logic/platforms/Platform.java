@@ -2,8 +2,10 @@ package logic.platforms;
 
 import javafx.animation.ParallelTransition;
 import javafx.scene.shape.Rectangle;
+import logic.Continuable;
+import logic.Pausable;
 
-public abstract class Platform extends Rectangle {
+public abstract class Platform extends Rectangle implements Pausable, Continuable{
     protected Type type;
 
     public enum Type {
@@ -23,7 +25,9 @@ public abstract class Platform extends Rectangle {
 
     public abstract void touch();
 
+    @Override
     public abstract void pause();
 
-    public abstract void continueAnimation();
+    @Override
+    public abstract void continueIt();
 }

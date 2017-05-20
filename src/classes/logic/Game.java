@@ -103,15 +103,15 @@ public class Game {
 
     public void continueGame() {
         for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
-            platform.continueAnimation();
+            platform.continueIt();
         }
         for (Bonus bonus : levelGenerator.getLevel().getBonuses()) {
-            bonus.continueAnimation();
+            bonus.continueIt();
         }
         for (Barrier barrier : levelGenerator.getLevel().getBarriers()) {
-            barrier.continueAnimation();
+            barrier.continueIt();
         }
-        character.continueAnimation();
+        character.continueIt();
         timer.start();
     }
 
