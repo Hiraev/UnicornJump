@@ -11,7 +11,6 @@ import javafx.scene.layout.Pane;
 
 public class StatusBar extends Pane {
     private static StatusBar instance;
-    private int windowWidth;
 
     private HBox box;
     private VBox scores;
@@ -69,7 +68,6 @@ public class StatusBar extends Pane {
         levelText.setId("statusVariable");
         fireText.setId("statusVariable");
 
-        this.windowWidth = windowWidth;
         box.getChildren().addAll(scores, level, fires);
         box.setAlignment(Pos.CENTER);
 
