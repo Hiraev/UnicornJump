@@ -1,15 +1,12 @@
 package gui;
 
-import gui.menu.GameOverScreen;
-import gui.menu.PauseScreen;
-import gui.menu.StatusBar;
+import gui.menu.*;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import gui.menu.GeneralScreen;
 import logic.Game;
 import animations.MoveAnimation;
 import logic.barriers.Barrier;
@@ -26,6 +23,7 @@ public class MainGame extends Application {
     private GeneralScreen generalScreen;
     private PauseScreen pauseScreen;
     private GameOverScreen gameOverScreen;
+    private RecordsScreen recordsScreen;
     private StatusBar statusBar;
     private Game game;
     private int lastPlatformY;
@@ -50,6 +48,12 @@ public class MainGame extends Application {
 
         generalScreen.getExitButton().setOnMouseClicked(event -> {
             System.exit(0);
+        });
+
+        generalScreen.getRecordsButton().setOnMouseClicked(event -> {
+            recordsScreen.setRecordsList(game.getRecords());
+            generalScreen.setVisible(false);
+            recordsScreen.setVisible(true);
         });
 
         pauseScreen.getResume().setOnMouseClicked(event -> {
@@ -79,6 +83,11 @@ public class MainGame extends Application {
             gameOverScreen.setVisible(false);
             generalScreen.setVisible(true);
         });
+
+        recordsScreen.getBackButton().setOnMouseClicked(event -> {
+            recordsScreen.setVisible(false);
+            generalScreen.setVisible(true);
+        });
     }
 
 
@@ -89,15 +98,17 @@ public class MainGame extends Application {
         generalScreen = GeneralScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         pauseScreen = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameOverScreen = GameOverScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
-        statusBar = new StatusBar(WINDOW_WIDTH, WINDOW_HEIGHT);
+        recordsScreen = RecordsScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+        statusBar = StatusBar.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
 
-        appRoot.getChildren().addAll(gameScreen, statusBar, generalScreen, pauseScreen, gameOverScreen);
+        appRoot.getChildren().addAll(gameScreen, statusBar, generalScreen, pauseScreen, gameOverScreen, recordsScreen);
 
         generalScreen.setVisible(true);
         statusBar.setVisible(false);
         pauseScreen.setVisible(false);
         gameScreen.setVisible(false);
         gameOverScreen.setVisible(false);
+        recordsScreen.setVisible(false);
 
         game = Game.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         setUpGame();
