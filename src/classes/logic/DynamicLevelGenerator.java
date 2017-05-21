@@ -232,7 +232,6 @@ public class DynamicLevelGenerator implements LevelGenerator {
     private void bonusDistributor() {
         for (int i = bonusesDequeSize; i < bonuses.size(); i++) {
             Bonus bonus = bonuses.get(i);
-            System.out.println(positionsForBonuses);
             bonus.setTranslateX(Math.random() * (width - 2 * width / 10) + width / 10);
             bonus.setTranslateY(bonusAndBarrierYDistribute(positionsForBonuses.get(i - bonusesDequeSize)) - bonus.getHeight() / 2);
         }
