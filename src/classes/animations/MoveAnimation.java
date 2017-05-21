@@ -8,7 +8,6 @@ import javafx.util.Duration;
 public class MoveAnimation extends Transition {
     private Node node;                  //Объект, который необхдимо сдвинуть
     private int direction = 1;          //Направление по умолчанию
-    private double firstPositionX;      //Позиция, откуда нужно начинать движение
     private Breaker breaker;            //Небольшая анимация торможения
 
     public enum DIRECTION {
@@ -18,7 +17,6 @@ public class MoveAnimation extends Transition {
     public MoveAnimation(Node node) {
         breaker = new Breaker();
         this.node = node;
-        this.firstPositionX = node.getTranslateX(); //Устанавливаем текущую позицию объекта
         setCycleDuration(Duration.INDEFINITE);      //Устанавливаем бесконечный цикл
     }
 
