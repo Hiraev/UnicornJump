@@ -28,6 +28,7 @@ public class MainGame extends Application {
     private Game game;
     private int lastPlatformY;
     private boolean pause;
+    private Pane backgroundPane;
 
     public static void main(String[] args) {
         launch(args);
@@ -95,11 +96,22 @@ public class MainGame extends Application {
         appRoot = new Pane();
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameScreen = new Pane();
+        backgroundPane = new Pane();
+        backgroundPane.setPrefSize(WINDOW_WIDTH,WINDOW_HEIGHT * 4);
+        backgroundPane.setId("backgroundPane");
+
         generalScreen = GeneralScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         pauseScreen = PauseScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameOverScreen = GameOverScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         recordsScreen = RecordsScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
         statusBar = StatusBar.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
+
+        gameScreen.setId("gameScreen");
+        generalScreen.setId("generalScreen");
+        pauseScreen.setId("pauseScreen");
+        gameOverScreen.setId("gameOverScreen");
+        recordsScreen.setId("recordsScreen");
+        statusBar.setId("statusBar");
 
         appRoot.getChildren().addAll(gameScreen, statusBar, generalScreen, pauseScreen, gameOverScreen, recordsScreen);
 
@@ -123,8 +135,13 @@ public class MainGame extends Application {
     private void setUpMap() {
         statusBar.setLevel(game.getLevel());
         gameScreen.getChildren().clear();
+
+        gameScreen.getChildren().add(backgroundPane);
+        backgroundPane.setTranslateY(lastPlatformY - WINDOW_HEIGHT * 3);
         for (Platform platform : game.getLevelMap().getPlatforms()) {
             gameScreen.getChildren().add(platform);
+            platform.setArcHeight(5);
+            platform.setArcWidth(5);
         }
         for (Bonus bonus : game.getLevelMap().getBonuses()) {
             gameScreen.getChildren().add(bonus);
@@ -197,7 +214,7 @@ public class MainGame extends Application {
                 /**
                  * ВЫСТРЕЛЫ ПРИ НАЖАТИИ КНОПКИ SPACE
                  */
-                if (game.getCharacter().isReadyToFire() & game.getCharacter().isCanFire() & !pause &event.getCode() == KeyCode.SPACE) {
+                if (game.getCharacter().isReadyToFire() & game.getCharacter().isCanFire() & !pause & event.getCode() == KeyCode.SPACE) {
                     gameScreen.getChildren().add(game.getCharacter().fire());
                 }
             }
