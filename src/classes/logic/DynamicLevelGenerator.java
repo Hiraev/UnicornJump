@@ -55,8 +55,8 @@ public class DynamicLevelGenerator implements LevelGenerator {
         bonuses = new ArrayList<>();
 
         //СОДЕРЖАНИЕ ЭТИХ СПИСКОВ ОПРЕДЕЛЯЕТСЯ КОЛ-ВОМ ПЛАТФОРМ НА УРОВЕНЬ
-        positionsForBarriers = Arrays.asList(0,3,2,5,4,7,1,8,9,6);
-        positionsForBonuses = Arrays.asList(4,3,6,5,8,9,1,2,7,0);
+        positionsForBarriers = Arrays.asList(0,3,2,5,4,7,1,8,-1,6);
+        positionsForBonuses = Arrays.asList(4,3,6,5,8,-1,1,2,7,0);
 
         levelMap = new LevelMap(platforms, barriers, bonuses);
         updateLevel();
