@@ -3,6 +3,7 @@ package logic;
 import animations.JumpAnimation;
 import animations.MoveAnimation;
 import javafx.animation.TranslateTransition;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
@@ -23,6 +24,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
     private boolean canFire = true;
 
     private Character() {
+        setId("character");
         setWidth(width);
         setHeight(height);
         jumpAnimation = new JumpAnimation(this);
@@ -125,6 +127,8 @@ public class Character extends Rectangle implements Pausable, Continuable {
         private boolean killed;
 
         Fire(double currentPosition) {
+            double v = Math.random();
+            setFill(v > 0.8 ? Color.RED : v > 0.6 ? Color.GREEN : v > 0.4 ? Color.BLUE : v > 0.2 ? Color.VIOLET : Color.MISTYROSE);
             this.setRadius(5);
             this.setTranslateX(Character.this.getTranslateX() + width / 2);
             this.translateTransition = new TranslateTransition(Duration.seconds(0.6), this);
