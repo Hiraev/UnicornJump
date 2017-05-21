@@ -10,14 +10,12 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import gui.menu.GeneralScreen;
-import logic.Character;
 import logic.Game;
 import animations.MoveAnimation;
 import logic.barriers.Barrier;
 import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
-import java.util.List;
 
 
 public class MainGame extends Application {
@@ -36,6 +34,11 @@ public class MainGame extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
+
+    /**
+     * ЗАДАЕМ ДЕЙСТВИЯ ДЛЯ ВСЕХ КНОПОК
+     */
 
     private void setUpButtons() {
         generalScreen.getStartButton().setOnMouseClicked(event -> {
@@ -97,7 +100,6 @@ public class MainGame extends Application {
         gameOverScreen.setVisible(false);
 
         game = Game.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
-
         setUpGame();
         setUpButtons();
         return appRoot;
@@ -106,7 +108,6 @@ public class MainGame extends Application {
 
     /**
      * Отрисовка карты
-     * НЕТ ОТРИСОВКИ ПРЕГРАД И БОНУСОВ (ПРЕГРАД И БОНУСОВ САМИХ ПОКА ЕЩЕ НЕТ)
      */
     private void setUpMap() {
         statusBar.setLevel(game.getLevel());
@@ -150,6 +151,10 @@ public class MainGame extends Application {
 
         scene.setOnKeyPressed(event -> {
             if (!game.isGameOver()) {
+
+                /**
+                 * ДВИЖЕНИЯ ВЛЕВО И ВПРАВО
+                 */
                 if (!pause) {
                     if (event.getCode() == KeyCode.LEFT) {
                         game.getCharacter().stopMove();
@@ -160,6 +165,10 @@ public class MainGame extends Application {
                     }
                 }
 
+
+                /**
+                 * ПАУЗА ПРИ НАЖАТИИ КНОПКИ ESC
+                 */
                 if (event.getCode() == KeyCode.ESCAPE) {
                     if (!pause) {
                         game.pause();
@@ -174,13 +183,18 @@ public class MainGame extends Application {
                     pause = !pause;
                 }
 
-                if (game.getCharacter().isReadyToFire() & !pause &event.getCode() == KeyCode.SPACE) {
-                    game.getCharacter().fire();
-                    List<Character.Fire> fires = game.getCharacter().getFires();
-                    gameScreen.getChildren().addAll(fires);
+                /**
+                 * ВЫСТРЕЛЫ ПРИ НАЖАТИИ КНОПКИ SPACE
+                 */
+                if (game.getCharacter().isReadyToFire() & game.getCharacter().isCanFire() & !pause &event.getCode() == KeyCode.SPACE) {
+                    gameScreen.getChildren().add(game.getCharacter().fire());
                 }
             }
         });
+
+        /**
+         * ПРЕКРАЩАЕМ ДВИЖЕНИЕ ВЛЕВО ИЛИ ВПРАВО, КОГДА КНОПКА ОТПУЩЕНА
+         */
         scene.setOnKeyReleased(event -> {
             if (!game.isGameOver() & !pause) {
                 if (event.getCode() == KeyCode.LEFT | event.getCode() == KeyCode.RIGHT) {
@@ -189,6 +203,12 @@ public class MainGame extends Application {
             }
         });
 
+        /**
+         * СЛЕДИМ ЗА ПОЛОЖЕНИЕМ ПЕРСОНАЖА ПО Y И ВЫПОЛНЯЕМ СЛЕДУЮЩИЕ ДЕЙСТВИЯ:
+         * - проверяем закончина ли игра, если да, то вызываем экран завершения игры, если нет:
+         *  - обновляем статус очков и пулек
+         *  - перемещаем экран, если персонаж слищком близко к верхушке экрана
+         */
         game.getCharacter().translateYProperty().addListener((value, oldVal, newVal) -> {
 
             if (game.isGameOver()) {
@@ -211,10 +231,9 @@ public class MainGame extends Application {
             statusBar.setFires(game.getCharacter().getCountOfFires());
 
             /**
-             *  ПЕРЕРИСОВКА КАРТЫ
-             *
-             * ПОПРОБОВАТЬ НАЙТИ ИНОЙ СПОСОБ ОБНОВЛЕНИЯ КАРТЫ
-             *
+             * ЕСЛИ КАРТА В ИГРЕ ОБНОВЛЕНА, ТО МЫ УЗНАЕМ ОБ ЭТОМ
+             * СРАВНИВАЯ ПОЗИЦИЮ ПОСЛЕДНЕЙ ПЛАТФОМЫ ВЗЯТУЮ ИЗ ИГРЫ И
+             * СОХРАНЕННУЮ ЗДЕСЬ
              */
             if (lastPlatformY != game.getLastPlatformY()) {
                 setUpMap();

@@ -20,6 +20,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
     private MoveAnimation moveAnimation;    //Движение в стороны
     private static Character instance;      //Данный объект, может быть только один
     private boolean readyToFire = true;
+    private boolean canFire = true;
 
     private Character() {
         setWidth(width);
@@ -64,6 +65,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
         jumpAnimation.stop();
         moveAnimation.stop();
         countOfFires = 5;
+        canFire = true;
     }
 
     public void stopMove() {
@@ -84,24 +86,43 @@ public class Character extends Rectangle implements Pausable, Continuable {
 
     public void plusCountOfFire(int count) {
         countOfFires += count;
+        canFire = true;
+    }
+
+    public boolean isCanFire() {
+        return canFire;
     }
 
     public boolean isReadyToFire() {
         return readyToFire;
     }
 
-    public void fire() {
-        readyToFire = false;
-        if (countOfFires != 0) {
-            fires.add(new Fire(getTranslateY()));
-            countOfFires--;
-        }
+    public void clearFires() {
+        fires.clear();
+    }
 
+    public Fire fire() {
+        Fire fire = new Fire(getTranslateY());
+        readyToFire = false;
+        fires.add(fire);
+        countOfFires--;
+        if (countOfFires == 0) {
+            canFire = false;
+        }
+        return fire;
     }
 
 
+    /**
+     * ВНУТРЕННИЙ КЛАСС, ОТВЕЧАЮЩИЙ ЗА ПУЛЬКИ
+     * ПРИ СОЗДАНИИ СРАЗУ ЛЕТИТ ВВЕРХ
+     * ПРИ ВРЕЗАНИИ В ПРЕГРАДУ ИЛИ ПРИ ЗАВЕРШЕНИИ СВОЕГО ПОЛЕТА,
+     * УНИЧНОЖАЕТСЯ, ТО ЕСТЬ ПРОСТО ПЕРЕМЕЩАЕТСЯ ВНИЗ КАРТЫ
+     */
+
     public class Fire extends Circle implements Pausable, Continuable {
         private TranslateTransition translateTransition;
+        private boolean killed;
 
         Fire(double currentPosition) {
             this.setRadius(5);
@@ -116,13 +137,17 @@ public class Character extends Rectangle implements Pausable, Continuable {
 
         public void go(double currentPositionY) {
             this.translateTransition.setFromY(currentPositionY);
-            this.translateTransition.setToY(currentPositionY - 450);
+            this.translateTransition.setToY(currentPositionY - 650);
             this.translateTransition.play();
         }
 
         public void kill() {
-            this.setTranslateY(Character.this.getTranslateY()+400);
-            fires.remove(this);
+            this.killed = true;
+            this.setTranslateY(Character.this.getTranslateY() + 400);
+        }
+
+        public boolean isKilled() {
+            return killed;
         }
 
         @Override
@@ -132,7 +157,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
 
         @Override
         public void continueIt() {
-            this.translateTransition.play();
+            if (!isKilled()) this.translateTransition.play();
         }
     }
 }

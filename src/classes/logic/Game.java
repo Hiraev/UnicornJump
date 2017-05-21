@@ -194,9 +194,10 @@ public class Game {
             }
 
             for (Character.Fire fire : character.getFires()) {
-                if (bb.intersects(fire.getBoundsInParent())) {
+                if (!fire.isKilled() & bb.intersects(fire.getBoundsInParent())) {
                     barrier.kill();
                     fire.kill();
+                    bonusScore += 10;
                 }
             }
         }
@@ -213,6 +214,7 @@ public class Game {
     private void updateMap() {
         levelGenerator.updateLevel();
         levelGenerator.levelDistributor();
+        character.clearFires();
     }
 
     /**
