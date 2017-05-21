@@ -1,5 +1,54 @@
 #button {
     -fx-font: 15px "Impact";
+    -fx-fill: rgb(15, 101, 255);
+}
+
+#backgroundPane {
+    -fx-background-image: url("images/brickwall.png");
+    -fx-background-repeat: repeat;
+}
+#generalScreen {
+     -fx-background-image: url("images/seigaiha.png");
+     -fx-background-repeat: repeat;
+}
+#gameOverScreen, #recordsScreen {
+    -fx-background-image: url("images/weather.png");
+    -fx-background-repeat: repeat;
+}
+
+#character {
+    -fx-fill: url("images/hero.png");
+}
+
+#starBonus {
+    -fx-fill: url("images/star.png");
+}
+
+#rainbowBonus {
+    -fx-fill: url("images/rainbow.png");
+}
+
+#staticBarrier {
+    -fx-fill: url("images/monster2.png");
+}
+#moveBarrier {
+    -fx-fill: url("images/monster.png");
+}
+
+#basicPlatform {
+    -fx-fill: grey;
+}
+#basicFadePlatform {
+    -fx-fill: rgb(40, 125, 252);
+}
+#moveFadePlatform {
+    -fx-fill: rgb(43, 125, 129);
+}
+#movePlatform {
+    -fx-fill: rgb(98, 181, 167);
+}
+#vanishPlatform {
+    -fx-fill: rgb(252, 73, 71);
 }
 
 #scoreText {
@@ -8,17 +57,17 @@
 
 #scoreTextScore {
     -fx-font: 40px "Comic Sans MS";
-    -fx-fill: rgb(144, 123, 142);
+    -fx-fill: rgb(66, 145, 250);
 }
 
 #statusVariable {
     -fx-font: 17px "Comic Sans MS";
-    -fx-fill: rgb(64, 94, 135);
+    -fx-fill: rgb(66, 145, 250);
 }
 
 #statusInfo {
     -fx-font: 12px "Comic Sans MS";
-    -fx-fill: rgb(64, 94, 142);
+    -fx-fill: rgb(66, 145, 250);
 }
 
 #textInRecordsScreen {
@@ -29,4 +78,11 @@
 #recordsBox {
     -fx-font: 15px "Comic Sans MS";
     -fx-fill: rgb(64, 94, 142);
+}
+
+#statusBarBox {
+    -fx-border-width: 3 0 0 0;
+    -fx-border-color: rgb(66, 145, 250);
+    -fx-background-color: rgb(239, 250, 254);
+    -fx-opacity: 0.85;
 }
