@@ -10,6 +10,7 @@ import javafx.scene.layout.Pane;
 
 
 public class StatusBar extends Pane {
+    private static StatusBar instance;
     private int windowWidth;
 
     private HBox box;
@@ -25,7 +26,14 @@ public class StatusBar extends Pane {
     private Text fireText;
     private Rectangle bg;
 
-    public StatusBar(int windowWidth, int windowHeight) {
+    public static StatusBar getInstance(int windowWidth, int windowHeight) {
+        if (instance == null) {
+            instance = new StatusBar(windowWidth, windowHeight);
+        }
+        return instance;
+    }
+
+    private StatusBar(int windowWidth, int windowHeight) {
         bg = new Rectangle(windowWidth + 10, 55, Color.WHITESMOKE);
         bg.setStroke(Color.DARKGRAY);
         bg.setStrokeWidth(2);
