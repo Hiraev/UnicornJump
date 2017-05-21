@@ -1,4 +1,4 @@
-package gui.menu;
+package gui.screens;
 
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;

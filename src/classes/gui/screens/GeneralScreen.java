@@ -1,5 +1,7 @@
-package gui.menu;
+package gui.screens;
 
+import gui.menu.Button;
+import gui.menu.MenuBox;
 import javafx.scene.layout.Pane;
 
 
