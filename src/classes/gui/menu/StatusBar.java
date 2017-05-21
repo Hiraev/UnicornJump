@@ -29,6 +29,8 @@ public class StatusBar extends Pane {
         bg = new Rectangle(windowWidth + 10, 55, Color.WHITESMOKE);
         bg.setStroke(Color.DARKGRAY);
         bg.setStrokeWidth(2);
+        bg.setOpacity(0.85);
+
         box = new HBox();
 
         scores = new VBox();
