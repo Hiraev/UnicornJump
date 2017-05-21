@@ -4,6 +4,7 @@ public class BasicPlatform extends Platform {
 
     public BasicPlatform(){
         type = Type.Basic;
+        setId("basicPlatform");
     }
 
     @Override

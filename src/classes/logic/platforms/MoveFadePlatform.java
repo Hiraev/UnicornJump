@@ -16,6 +16,7 @@ public class MoveFadePlatform extends Platform {
 
 
     public MoveFadePlatform(int windowWidth) {
+        setId("moveFadePlatform");
         type = Type.MoveFade;
 
         translateTransition = new TranslateTransition(Duration.seconds(2), this);

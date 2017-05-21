@@ -6,6 +6,7 @@ public class RainbowBonus extends Bonus {
 
     public RainbowBonus(int windowWidth) {
         super(windowWidth);
+        setId("rainbowBonus");
         type = Type.Rainbow;
     }
 

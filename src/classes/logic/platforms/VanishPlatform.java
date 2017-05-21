@@ -7,6 +7,7 @@ public class VanishPlatform extends Platform {
     private OpacityTransition opacityTransition;
 
     public VanishPlatform(int gameWidth) {
+        setId("vanishPlatform");
         type = Type.Vanish;
         opacityTransition = new OpacityTransition(Duration.seconds(1), this);
         opacityTransition.setOnFinished(event -> setTranslateX(2 * gameWidth));

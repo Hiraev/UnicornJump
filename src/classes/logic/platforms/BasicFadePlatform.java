@@ -8,6 +8,7 @@ public class BasicFadePlatform extends Platform {
     private OpacityTransition opacityTransition;
 
     public BasicFadePlatform() {
+        setId("basicFadePlatform");
         type = Type.BasicFade;
         opacityTransition = new OpacityTransition(Duration.seconds(2), this);
         opacityTransition.setAutoReverse(true);

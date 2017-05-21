@@ -8,6 +8,7 @@ public class MovePlatform extends Platform {
     private TranslateTransition translateTransition;
 
     public MovePlatform(int gameWidth) {
+        setId("movePlatform");
         type = Type.Move;
 
         translateTransition = new TranslateTransition(Duration.seconds(1.5), this);

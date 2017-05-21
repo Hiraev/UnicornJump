@@ -14,6 +14,7 @@ public class MoveBarrier extends Barrier {
 
     public MoveBarrier(int windowWidth) {
         super(windowWidth);
+        setId("moveBarrier");
         type = Type.Move;
         rotateTransition = new RotateTransition(Duration.seconds(0.2), this);
         rotateTransition.setFromAngle(-30);

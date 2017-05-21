@@ -8,6 +8,7 @@ public class StarBonus extends Bonus {
 
     public StarBonus(int windowWidth) {
         super(windowWidth);
+        setId("starBonus");
         type = Type.Star;
     }
 

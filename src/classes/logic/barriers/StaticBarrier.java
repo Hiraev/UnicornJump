@@ -4,6 +4,7 @@ public class StaticBarrier extends Barrier {
 
     public StaticBarrier(int windowWidth) {
         super(windowWidth);
+        setId("staticBarrier");
         type = Type.Static;
     }
 
