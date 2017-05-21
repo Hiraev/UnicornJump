@@ -1,6 +1,5 @@
 package logic.platforms;
 
-import javafx.animation.ParallelTransition;
 import javafx.scene.shape.Rectangle;
 import logic.Continuable;
 import logic.Pausable;

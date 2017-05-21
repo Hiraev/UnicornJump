@@ -1,6 +1,5 @@
 package gui.menu;
 
-import animations.OpacityTransition;
 import javafx.animation.Animation;
 import javafx.animation.FillTransition;
 import javafx.geometry.Pos;

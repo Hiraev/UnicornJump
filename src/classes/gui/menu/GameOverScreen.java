@@ -11,8 +11,6 @@ public class GameOverScreen extends Pane {
     private Text scoreText;
     private Text scoreText2;
     private Text scoreTextScore;
-    private int width;
-    private int height;
     private Button restart;
     private Button exit;
     private VBox vBox;
