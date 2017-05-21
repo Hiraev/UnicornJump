@@ -3,8 +3,6 @@ package gui.screens;
 import javafx.geometry.Pos;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.scene.layout.Pane;
 
@@ -23,7 +21,6 @@ public class StatusBar extends Pane {
     private Text levelText;
     private Text infoFiresText;
     private Text fireText;
-    private Rectangle bg;
 
     public static StatusBar getInstance(int windowWidth, int windowHeight) {
         if (instance == null) {
@@ -33,29 +30,25 @@ public class StatusBar extends Pane {
     }
 
     private StatusBar(int windowWidth, int windowHeight) {
-        bg = new Rectangle(windowWidth + 10, 55, Color.WHITESMOKE);
-        bg.setStroke(Color.DARKGRAY);
-        bg.setStrokeWidth(2);
-        bg.setOpacity(0.85);
-
         box = new HBox();
+        box.setId("statusBarBox");
 
         scores = new VBox();
-        scores.setPrefWidth(windowWidth / 3);
+
         infoScoreText = new Text("Очков");
         scoreText = new Text();
         scores.getChildren().addAll(scoreText, infoScoreText);
         scores.setAlignment(Pos.CENTER);
 
         level = new VBox();
-        level.setPrefWidth(windowWidth / 3);
+
         infoLevelText = new Text("Уровень");
         levelText = new Text();
         level.getChildren().addAll(levelText, infoLevelText);
         level.setAlignment(Pos.CENTER);
 
         fires = new VBox();
-        fires.setPrefWidth(windowWidth / 3);
+
         infoFiresText = new Text("Пулек");
         fireText = new Text();
         fires.getChildren().addAll(fireText, infoFiresText);
@@ -70,13 +63,12 @@ public class StatusBar extends Pane {
 
         box.getChildren().addAll(scores, level, fires);
         box.setAlignment(Pos.CENTER);
-
+        box.setPrefWidth(windowWidth);
         box.setPrefHeight(50);
         box.setTranslateY(windowHeight - box.getPrefHeight());
-        bg.setTranslateY(box.getTranslateY() );
-        bg.setTranslateX(-5);
+        box.setSpacing(70);
 
-        getChildren().addAll(bg, box);
+        getChildren().addAll(box);
     }
 
     public void setScores(int score) {
