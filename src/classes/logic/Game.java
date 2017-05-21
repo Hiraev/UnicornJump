@@ -6,6 +6,8 @@ import logic.barriers.Barrier;
 import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
+import java.util.List;
+
 public class Game {
     private static int LEVEL_HEIGHT = 10;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
@@ -14,11 +16,12 @@ public class Game {
     private final AnimationTimer timer;     //Игровое время
 
     private int score;                      //Очки
-    private int bonusScore;                    //Бонусы
+    private int bonusScore;                 //Бонусы
     public final int GAME_WIDTH;            //Ширина игрового поля
     public final int GAME_HEIGHT;           //Высота игрового поля
     private static Game instance;           //Статическое поле игры, игра одна, поэтому нет смысла создавать много
     private int minPosition;
+    private RecordsLoaderAndSaver recordsLoaderAndSaver;
 
 
     /**
@@ -41,6 +44,7 @@ public class Game {
         GAME_WIDTH = width;
         GAME_HEIGHT = height;
         levelGenerator = new DynamicLevelGenerator(width, LEVEL_HEIGHT);
+        recordsLoaderAndSaver = RecordsLoaderAndSaver.getInstance();
 
         setUpGame();
         timer = new AnimationTimer() {
@@ -209,6 +213,11 @@ public class Game {
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         levelGenerator.resetLastPlatformY();
+        recordsLoaderAndSaver.add("-------",getScore());
+    }
+
+    public List<RecordsLoaderAndSaver.Record> getRecords() {
+        return recordsLoaderAndSaver.getRecords();
     }
 
     private void updateMap() {
