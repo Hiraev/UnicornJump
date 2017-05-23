@@ -8,7 +8,7 @@ import logic.platforms.Platform;
 
 import java.util.List;
 
-public class Game implements Pausable, Continuable{
+public class Game implements Pausable, Continuable {
     private static int LEVEL_HEIGHT = 10;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
     private LevelGenerator levelGenerator;    //Генератор карты
@@ -22,6 +22,7 @@ public class Game implements Pausable, Continuable{
     private static Game instance;           //Статическое поле игры, игра одна, поэтому нет смысла создавать много
     private int minPosition;
     private RecordsLoaderAndSaver recordsLoaderAndSaver;
+    private boolean resultAlreadySaved;
 
 
     /**
@@ -80,6 +81,7 @@ public class Game implements Pausable, Continuable{
         bonusScore = 0;
         score = 0;
         gameOver = false;
+        resultAlreadySaved = false;
         timer.start();
         character.jump();
     }
@@ -215,7 +217,15 @@ public class Game implements Pausable, Continuable{
         character.setTranslateY(0);
         character.setTranslateX(GAME_WIDTH / 2);
         levelGenerator.resetLastPlatformY();
-        recordsLoaderAndSaver.add("-------",getScore());
+    }
+
+    public void saveRecords(final String name) {
+        if (!resultAlreadySaved) {
+            if (name.length() > 20) throw new IllegalArgumentException("Имя не должно превышать 20 символов");
+            if (name.isEmpty()) recordsLoaderAndSaver.add("-------", getScore());
+            else recordsLoaderAndSaver.add(name, getScore());
+            resultAlreadySaved = true;
+        }
     }
 
     public List<RecordsLoaderAndSaver.Record> getRecords() {
@@ -226,6 +236,7 @@ public class Game implements Pausable, Continuable{
         levelGenerator.updateLevel();
         levelGenerator.levelDistributor();
         character.clearFires();
+
     }
 
     /**
