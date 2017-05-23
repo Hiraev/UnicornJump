@@ -128,7 +128,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
 
         Fire(double currentPosition) {
             double v = Math.random();
-            setFill(v > 0.8 ? Color.RED : v > 0.6 ? Color.GREEN : v > 0.4 ? Color.BLUE : v > 0.2 ? Color.VIOLET : Color.MISTYROSE);
+            setFill(v > 0.8 ? Color.RED : v > 0.6 ? Color.GREEN : v > 0.4 ? Color.BLUE : v > 0.2 ? Color.VIOLET : Color.BLUEVIOLET);
             this.setRadius(5);
             this.setTranslateX(Character.this.getTranslateX() + width / 2);
             this.translateTransition = new TranslateTransition(Duration.seconds(0.6), this);
