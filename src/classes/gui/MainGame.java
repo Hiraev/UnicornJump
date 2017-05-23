@@ -176,6 +176,13 @@ public class MainGame extends Application {
         Scene scene = new Scene(setUp());
         scene.getStylesheets().add("main.css");
         primaryStage.setScene(scene);
+        final String systemName = System.getProperty("os.name");
+        if (systemName.matches("Windows.*")) {
+            primaryStage.setWidth(WINDOW_WIDTH);
+            primaryStage.setHeight(WINDOW_HEIGHT + 27);
+        }
+        appRoot.setLayoutY(0);
+        appRoot.setLayoutX(0);
         primaryStage.setResizable(false);
         /**
          * СОХРАНЕНИЕ РЕЗУЛЬТАТОВ, ЕСЛИ ОКНО БУДЕТ ЗАКРЫТО
@@ -215,7 +222,6 @@ public class MainGame extends Application {
                         pauseScreen.activateAnimation();
                     } else {
                         game.continueIt();
-
                         pauseScreen.setVisible(false);
                     }
                     pause = !pause;
