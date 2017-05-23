@@ -61,12 +61,11 @@ public class RecordsScreen extends Pane{
 
     public void updateRecordsBox() {
         recordsBox.getChildren().clear();
-        Collections.reverse(recordsList);
-        int i = 0;
+        int i = recordsList.size() - 1;
         for (RecordsLoaderAndSaver.Record record : recordsList) {
             recordsBox.add(new Text(record.getName()), 0, i);
             recordsBox.add(new Text(String.valueOf(record.getScore())), 1, i);
-            i++;
+            i--;
         }
     }
 }
