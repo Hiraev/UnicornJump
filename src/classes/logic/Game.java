@@ -8,7 +8,7 @@ import logic.platforms.Platform;
 
 import java.util.List;
 
-public class Game {
+public class Game implements Pausable, Continuable{
     private static int LEVEL_HEIGHT = 10;   //Высота каждого уровня (кол-во платформ на уровень)
     private boolean gameOver;               //Игра закончена или еще идет
     private LevelGenerator levelGenerator;    //Генератор карты
@@ -85,6 +85,7 @@ public class Game {
     }
 
     //Пауза
+    @Override
     public void pause() {
         timer.stop();
         for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
@@ -99,7 +100,8 @@ public class Game {
         character.pause();
     }
 
-    public void continueGame() {
+    @Override
+    public void continueIt() {
         for (Platform platform : levelGenerator.getLevel().getPlatforms()) {
             platform.continueIt();
         }

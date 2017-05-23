@@ -57,7 +57,7 @@ public class Character extends Rectangle implements Pausable, Continuable {
 
     @Override
     public void continueIt() {
-        jumpAnimation.continueAnimation();
+        jumpAnimation.continueIt();
         for (Fire fire : fires) {
             fire.continueIt();
         }

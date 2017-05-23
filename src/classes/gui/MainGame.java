@@ -58,7 +58,7 @@ public class MainGame extends Application {
         });
 
         pauseScreen.getResume().setOnMouseClicked(event -> {
-            game.continueGame();
+            game.continueIt();
             pauseScreen.setVisible(false);
             pause = !pause;
         });
@@ -204,7 +204,7 @@ public class MainGame extends Application {
                         pauseScreen.setVisible(true);
                         pauseScreen.activateAnimation();
                     } else {
-                        game.continueGame();
+                        game.continueIt();
 
                         pauseScreen.setVisible(false);
                     }

@@ -3,10 +3,11 @@ package animations;
 import javafx.animation.Transition;
 import javafx.scene.Node;
 import javafx.util.Duration;
+import logic.Continuable;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class JumpAnimation extends Transition {
+public class JumpAnimation extends Transition implements Continuable{
     private Node node;                                      //Объект, который должен прыгать
     private double currentPosition;                         //Последняя позиция объекта, после прыжка. Позиция, откуда надо падать
     private double maxValue = Math.pow(3, Math.E + 1) * 4;  //Максимальная высота, на которую прыгает объект
@@ -49,7 +50,8 @@ public class JumpAnimation extends Transition {
         super.play();
     }
 
-    public void continueAnimation(){
+    @Override
+    public void continueIt(){
         if (isFalling()) fallAnimation.play();
         else super.play();
     }
