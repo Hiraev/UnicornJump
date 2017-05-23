@@ -14,7 +14,6 @@ import logic.bonuses.Bonus;
 import logic.platforms.Platform;
 
 
-
 public class MainGame extends Application {
     static int WINDOW_WIDTH = 400;
     static int WINDOW_HEIGHT = 600;
@@ -64,7 +63,6 @@ public class MainGame extends Application {
         });
 
         pauseScreen.getExit().setOnMouseClicked(event -> {
-            game.over();
             pause = !pause;
             setUpGame();
             generalScreen.setVisible(true);
@@ -74,6 +72,7 @@ public class MainGame extends Application {
         });
 
         gameOverScreen.getRestart().setOnMouseClicked(event -> {
+            game.saveRecords(gameOverScreen.getName());
             game.play();
             gameOverScreen.setVisible(false);
             gameScreen.setVisible(true);
@@ -81,8 +80,13 @@ public class MainGame extends Application {
         });
 
         gameOverScreen.getExit().setOnMouseClicked(event -> {
+            game.saveRecords(gameOverScreen.getName());
             gameOverScreen.setVisible(false);
             generalScreen.setVisible(true);
+        });
+
+        gameOverScreen.getSave().setOnMouseClicked(event -> {
+            game.saveRecords(gameOverScreen.getName());
         });
 
         recordsScreen.getBackButton().setOnMouseClicked(event -> {
@@ -97,7 +101,7 @@ public class MainGame extends Application {
         appRoot.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT);
         gameScreen = new Pane();
         backgroundPane = new Pane();
-        backgroundPane.setPrefSize(WINDOW_WIDTH,WINDOW_HEIGHT * 4);
+        backgroundPane.setPrefSize(WINDOW_WIDTH, WINDOW_HEIGHT * 4);
         backgroundPane.setId("backgroundPane");
 
         generalScreen = GeneralScreen.getInstance(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -173,6 +177,12 @@ public class MainGame extends Application {
         scene.getStylesheets().add("main.css");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        /**
+         * СОХРАНЕНИЕ РЕЗУЛЬТАТОВ, ЕСЛИ ОКНО БУДЕТ ЗАКРЫТО
+         */
+        primaryStage.setOnCloseRequest(event -> {
+            if (gameOverScreen.isVisible()) game.saveRecords(gameOverScreen.getName());
+        });
 
         primaryStage.show();
 
