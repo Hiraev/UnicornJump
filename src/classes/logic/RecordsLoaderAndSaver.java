@@ -24,7 +24,7 @@ public class RecordsLoaderAndSaver implements Serializable {
         if (records.size() < 10) {
             records.add(new Record(name, newScore));
         } else if (Collections.min(records).getScore() < newScore) {
-            records.remove(9);
+            records.remove(0);
             records.add(new Record(name, newScore));
         }
         Collections.sort(records);
